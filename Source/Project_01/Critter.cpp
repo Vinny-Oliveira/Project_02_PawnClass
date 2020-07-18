@@ -2,6 +2,7 @@
 
 
 #include "Critter.h"
+#include "Camera/CameraComponent.h"
 
 // Sets default values
 ACritter::ACritter()
@@ -11,6 +12,12 @@ ACritter::ACritter()
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
+	MeshComponent->SetupAttachment(GetRootComponent());
+
+	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	Camera->SetupAttachment(GetRootComponent());
+	Camera->SetRelativeLocation(FVector(-300.0f, .0f, 300.f));
+	Camera->SetRelativeRotation(FRotator(-45.f, 0.f, 0.f));
 }
 
 // Called when the game starts or when spawned
