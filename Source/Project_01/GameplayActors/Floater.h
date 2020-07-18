@@ -17,7 +17,7 @@ public:
 	AFloater();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ActorMeshComponents")
-	UStaticMeshComponent* StaticMesh;
+	UStaticMeshComponent* StaticMesh { nullptr };
 
 	// Location used by SetActorLocation() when BeginPlay() is called
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Floater Variables")
