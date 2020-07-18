@@ -18,6 +18,8 @@ ACritter::ACritter()
 	Camera->SetupAttachment(GetRootComponent());
 	Camera->SetRelativeLocation(FVector(-300.0f, .0f, 300.f));
 	Camera->SetRelativeRotation(FRotator(-45.f, 0.f, 0.f));
+
+	AutoPossessPlayer = EAutoReceiveInput::Player0;
 }
 
 // Called when the game starts or when spawned
