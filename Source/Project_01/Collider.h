@@ -30,11 +30,11 @@ public:
 	UStaticMeshComponent* MeshComponent{ nullptr };
 
 	FORCEINLINE UStaticMeshComponent* GetMeshComponent() { return MeshComponent; }
-	FORCEINLINE SetMeshComponent(UStaticMeshComponent* Mesh) { MeshComponent = Mesh; }
+	FORCEINLINE void SetMeshComponent(UStaticMeshComponent* Mesh) { MeshComponent = Mesh; }
 
 	UPROPERTY(VisibleAnywhere, Category = "Mesh")
-	USphereComponent* SphereComponent{ nullptr };
+	class USphereComponent* SphereComponent{ nullptr };
 
 	FORCEINLINE USphereComponent* GetSphereComponent() { return SphereComponent; }
-	FORCEINLINE SetSphereComponent(USphereComponent* Sphere) { SphereComponent = Sphere; }
+	FORCEINLINE void SetSphereComponent(USphereComponent* Sphere) { SphereComponent = Sphere; }
 };
