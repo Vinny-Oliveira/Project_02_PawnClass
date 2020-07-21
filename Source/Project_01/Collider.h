@@ -55,6 +55,7 @@ public:
 	FORCEINLINE void SetSpringArmComponent(USpringArmComponent* InSpringArm) { SpringArm = InSpringArm; }
 
 	/* Movement Component */
+	UPROPERTY(VisibleAnywhere, Category = "Movement")
 	class UColliderMovementComponent* OurMovementComponent{ nullptr };
 
 	virtual UPawnMovementComponent* GetMovementComponent() const override;

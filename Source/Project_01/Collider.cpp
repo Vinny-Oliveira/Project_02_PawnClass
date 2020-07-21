@@ -43,7 +43,7 @@ ACollider::ACollider()
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 
 	OurMovementComponent = CreateDefaultSubobject<UColliderMovementComponent>(TEXT("OurMovementComponent"));
-	OurMovementComponent->UpdatedComponent = SphereComponent;
+	OurMovementComponent->UpdatedComponent = RootComponent;
 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 
