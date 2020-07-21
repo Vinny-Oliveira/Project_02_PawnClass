@@ -26,15 +26,41 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	/* Mesh */
 	UPROPERTY(VisibleAnywhere, Category = "Mesh")
 	UStaticMeshComponent* MeshComponent{ nullptr };
 
 	FORCEINLINE UStaticMeshComponent* GetMeshComponent() { return MeshComponent; }
 	FORCEINLINE void SetMeshComponent(UStaticMeshComponent* Mesh) { MeshComponent = Mesh; }
 
+	/* Sphere */
 	UPROPERTY(VisibleAnywhere, Category = "Mesh")
 	class USphereComponent* SphereComponent{ nullptr };
 
 	FORCEINLINE USphereComponent* GetSphereComponent() { return SphereComponent; }
 	FORCEINLINE void SetSphereComponent(USphereComponent* Sphere) { SphereComponent = Sphere; }
+
+	/* Camera */
+	UPROPERTY(VisibleAnywhere, Category = "Mesh")
+	class UCameraComponent* Camera{ nullptr };
+
+	FORCEINLINE UCameraComponent* GetCameraComponent() { return Camera; }
+	FORCEINLINE void SetCameraComponent(UCameraComponent* InCamera) { Camera = InCamera; }
+
+	/* Spring */
+	UPROPERTY(VisibleAnywhere, Category = "Mesh")
+	class USpringArmComponent* SpringArm;
+
+	FORCEINLINE USpringArmComponent* GetSpringArmComponent() { return SpringArm; }
+	FORCEINLINE void SetSpringArmComponent(USpringArmComponent* InSpringArm) { SpringArm = InSpringArm; }
+
+	/* Movement Component */
+	class UColliderMovementComponent* OurMovementComponent{ nullptr };
+
+	virtual UPawnMovementComponent* GetMovementComponent() const override;
+
+private:
+
+	void MoveForward(float input);
+	void MoveRight(float input);
 };
