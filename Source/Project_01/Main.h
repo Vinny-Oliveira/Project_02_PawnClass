@@ -27,6 +27,15 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+private:
+
+	/// <summary>
+	/// Move is a specific direction based on the camera and the axis (forward/backward or left/right)
+	/// </summary>
+	/// <param name="Value"></param>
+	/// <param name="Axis"></param>
+	void MoveInDirection(float Value, EAxis::Type Axis);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

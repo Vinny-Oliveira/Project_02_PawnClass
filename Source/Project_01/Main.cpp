@@ -45,18 +45,21 @@ void AMain::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
-void AMain::MoveForward(float Value) {
-	//AMain::MoveInDirection(Value, EAxis::X);
+void AMain::MoveInDirection(float Value, EAxis::Type Axis) {
 	if ((Controller != nullptr) && (Value != 0.f)) {
 		// Find out which way is forward (where the camera is pointing to)
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
 
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(Axis);
 		AddMovementInput(Direction, Value);
 	}
 }
 
+void AMain::MoveForward(float Value) {
+	AMain::MoveInDirection(Value, EAxis::X);
+}
+
 void AMain::MoveRight(float Value) {
-	//AMain::MoveInDirection(Value, EAxis::Y);
+	AMain::MoveInDirection(Value, EAxis::Y);
 }
