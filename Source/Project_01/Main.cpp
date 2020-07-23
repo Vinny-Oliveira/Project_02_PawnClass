@@ -47,7 +47,7 @@ void AMain::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	// Bind movement
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMain::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &AMain::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &AMain::MoveRight);
 	
 	// Bind turns
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
