@@ -23,6 +23,14 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera{ nullptr };
 
+	/** Rate of turning speed (%) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
+	float BaseTurnRate{};
+	
+	/** Rate of looking up/down speed (%) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
+	float BaseLookUpRate{};
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -54,5 +62,21 @@ public:
 	/// </summary>
 	/// <param name="value"></param>
 	void MoveRight(float Value);
+
+	/// <summary>
+	/// Called via input to turn at a given Rate
+	/// </summary>
+	/// <param name="Rate">This is a normalized turn rate</param>
+	void TurnAtRate(float Rate);
+	
+	/// <summary>
+	/// Called via input to look up/down at a given Rate
+	/// </summary>
+	/// <param name="Rate">This is a normalized look up/down rate</param>
+	void LookUpAtRate(float Rate);
+
+	/** Getters for CameraBoom and FollowCamera */
+	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 };

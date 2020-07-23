@@ -7,7 +7,7 @@
 
 // Sets default values
 AMain::AMain()
-{
+	: BaseTurnRate{ 65.f }, BaseLookUpRate{ 65.f } {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -51,6 +51,7 @@ void AMain::MoveInDirection(float Value, EAxis::Type Axis) {
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
 
+		// Move in that direction
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(Axis);
 		AddMovementInput(Direction, Value);
 	}
@@ -62,4 +63,12 @@ void AMain::MoveForward(float Value) {
 
 void AMain::MoveRight(float Value) {
 	AMain::MoveInDirection(Value, EAxis::Y);
+}
+
+void AMain::TurnAtRate(float Rate) {
+	AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
+}
+
+void AMain::LookUpAtRate(float Rate) {
+	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
