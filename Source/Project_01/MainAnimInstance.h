@@ -27,9 +27,13 @@ public:
 
 	virtual void NativeInitializeAnimation() override;
 
+	UFUNCTION(BlueprintCallable, Category = AnimationProperties)
 	void UpdateAnimationProperties();
 
 private:
 
+	/// <summary>
+	/// Check is the Pawn is valid and try to get it if it is not
+	/// </summary>
 	void CheckForPawn();
 };
