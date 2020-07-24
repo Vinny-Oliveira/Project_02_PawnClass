@@ -13,8 +13,12 @@ AFloorSwitch::AFloorSwitch()
 	TriggerBox = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerBox"));
 	RootComponent = TriggerBox;
 
-	TriggerBox->OnComponentBeginOverlap.AddDynamic(this, &AFloorSwitch::OnOverlapBegin);
-	TriggerBox->OnComponentEndOverlap.AddDynamic(this, &AFloorSwitch::OnOverlapEnd);
+	// This ensures the trigger box is only to be stepped onto. There is no physics involved
+	TriggerBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	TriggerBox->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
+	// Ignore everything that steps on the trigger box, except the pawn
+	TriggerBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	TriggerBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 
 	FloorSwitch = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FloorSwitch"));
 	FloorSwitch->SetupAttachment(GetRootComponent());
@@ -28,6 +32,9 @@ void AFloorSwitch::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// Bind the trigger box to its functions
+	TriggerBox->OnComponentBeginOverlap.AddDynamic(this, &AFloorSwitch::OnOverlapBegin);
+	TriggerBox->OnComponentEndOverlap.AddDynamic(this, &AFloorSwitch::OnOverlapEnd);
 }
 
 // Called every frame
