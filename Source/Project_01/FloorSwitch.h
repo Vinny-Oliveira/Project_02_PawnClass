@@ -41,4 +41,10 @@ public:
 	UFUNCTION()
 	void OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "Floor Switch")
+	void RaiseDoor();
+	
+	UFUNCTION(BlueprintImplementableEvent, Category = "Floor Switch")
+	void LowerDoor();
+
 };
