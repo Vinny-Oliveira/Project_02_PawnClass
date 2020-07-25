@@ -39,15 +39,28 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+private:
+
+	/// <summary>
+	/// Update the Z coordinate of a given Component
+	/// </summary>
+	/// <param name="Component"></param>
+	/// <param name="Z"></param>
+	void UpdateComponentLocation(UStaticMeshComponent* Component, FVector InitialLocation, float Z);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	/* Events to detect when the switch is stepped on and no longer stepped on */
 
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	
 	UFUNCTION()
 	void OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	/* Blueprint Events to raise and lower the door and the switch */
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Floor Switch")
 	void RaiseDoor();
@@ -61,7 +74,12 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Floor Switch")
 	void LowerFloorSwitch();
 
+	/* Blueprint functions to update the door's and the switch's locations */
+
 	UFUNCTION(BlueprintCallable, Category = "Floor Switch")
 	void UpdateDoorLocation(float Z);
+	
+	UFUNCTION(BlueprintCallable, Category = "Floor Switch")
+	void UpdateFloorSwitchLocation(float Z);
 
 };

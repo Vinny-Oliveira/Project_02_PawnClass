@@ -61,6 +61,16 @@ void AFloorSwitch::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor
 	RaiseFloorSwitch();
 }
 
-void AFloorSwitch::UpdateDoorLocation(float Z) {
+void AFloorSwitch::UpdateComponentLocation(UStaticMeshComponent* Component, FVector InitialLocation, float Z) {
+	FVector NewLocation = InitialLocation;
+	NewLocation.Z += Z;
+	Component->SetWorldLocation(NewLocation);
+}
 
+void AFloorSwitch::UpdateDoorLocation(float Z) {
+	AFloorSwitch::UpdateComponentLocation(Door, InitialDoorLocation, Z);
+}
+
+void AFloorSwitch::UpdateFloorSwitchLocation(float Z) {
+	AFloorSwitch::UpdateComponentLocation(FloorSwitch, InitialSwitchLocation, Z);
 }
