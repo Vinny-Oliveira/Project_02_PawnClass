@@ -5,7 +5,7 @@
 
 // Sets default values
 AFloatingPlatform::AFloatingPlatform()
-{
+	: StartPoint{ FVector(0.f) }, EndPoint{ FVector(0.f) } {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -18,6 +18,7 @@ void AFloatingPlatform::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	StartPoint = GetActorLocation();
 }
 
 // Called every frame

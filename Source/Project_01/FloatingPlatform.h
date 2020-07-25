@@ -19,6 +19,14 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Platform")
 	UStaticMeshComponent* Mesh{ nullptr };
 
+	/** Where the platform starts its movement */
+	UPROPERTY(EditAnywhere)
+	FVector StartPoint;
+	
+	/** Where the platform ends its movement */
+	UPROPERTY(EditAnywhere, meta = (MakeEditWidget = "true"))
+	FVector EndPoint;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
