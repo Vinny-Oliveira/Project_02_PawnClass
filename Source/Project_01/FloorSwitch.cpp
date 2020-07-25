@@ -6,7 +6,7 @@
 
 // Sets default values
 AFloorSwitch::AFloorSwitch()
-{
+	: SwitchTime{ 2.f }, bCharacterOnSwitch{ false } {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -51,14 +51,19 @@ void AFloorSwitch::Tick(float DeltaTime)
 
 void AFloorSwitch::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
 	UE_LOG(LogTemp, Warning, TEXT("OVERLAP BEGIN"));
+	if (!bCharacterOnSwitch) {
+		bCharacterOnSwitch = true;
+	}
 	RaiseDoor();
 	LowerFloorSwitch();
 }
 
 void AFloorSwitch::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
 	UE_LOG(LogTemp, Warning, TEXT("OVERLAP END"));
-	LowerDoor();
-	RaiseFloorSwitch();
+	if (bCharacterOnSwitch) {
+		bCharacterOnSwitch = false;
+	}
+	GetWorldTimerManager().SetTimer(SwitchHandle, this, &AFloorSwitch::CloseDoor, SwitchTime);
 }
 
 void AFloorSwitch::UpdateComponentLocation(UStaticMeshComponent* Component, FVector InitialLocation, float Z) {
@@ -73,4 +78,11 @@ void AFloorSwitch::UpdateDoorLocation(float Z) {
 
 void AFloorSwitch::UpdateFloorSwitchLocation(float Z) {
 	AFloorSwitch::UpdateComponentLocation(FloorSwitch, InitialSwitchLocation, Z);
+}
+
+void AFloorSwitch::CloseDoor() {
+	if (!bCharacterOnSwitch) {
+		LowerDoor();
+		RaiseFloorSwitch();
+	}
 }
