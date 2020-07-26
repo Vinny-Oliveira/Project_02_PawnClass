@@ -27,6 +27,9 @@ public:
 	UPROPERTY(EditAnywhere, meta = (MakeEditWidget = "true"))
 	FVector EndPoint;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Platform")
+	float InterpSpeed{};
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
