@@ -27,8 +27,22 @@ public:
 	UPROPERTY(EditAnywhere, meta = (MakeEditWidget = "true"))
 	FVector EndPoint;
 
+	/** Interpolation speed */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Platform")
 	float InterpSpeed{};
+	
+	/** Interpolation speed */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Platform")
+	float InterpTime{};
+
+	/** Timer handle for the interpolation */
+	FTimerHandle InterpTimer;
+
+	/** Whether the platform is done interping on not */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Platform")
+	bool bIsInterping{};
+
+	float Distance{};
 
 protected:
 	// Called when the game starts or when spawned
@@ -38,4 +52,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	/// <summary>
+	/// Toggle the value of bIsInterping
+	/// </summary>
+	void ToggleInterping();
 };
