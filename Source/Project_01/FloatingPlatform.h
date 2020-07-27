@@ -42,6 +42,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Platform")
 	bool bIsInterping{};
 
+	/** The distance the platform needs to travel */
 	float Distance{};
 
 protected:
@@ -56,4 +57,7 @@ public:
 	/// Toggle the value of bIsInterping
 	/// </summary>
 	void ToggleInterping();
+
+	template <typename T>
+	void SwapElements(T& Element1, T& Element2);
 };
