@@ -5,7 +5,7 @@
 
 // Sets default values
 AFloatingPlatform::AFloatingPlatform()
-	: StartPoint{ FVector(0.f) }, EndPoint{ FVector(0.f) }, InterpSpeed{ 4.f }, InterpTime{ 1.f }, bIsMoving{ false } {
+	: StartPoint{ FVector(0.f) }, EndPoint{ FVector(0.f) }, InterpSpeed{ 4.f }, WaitTime{ 1.f }, bIsMoving{ false } {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -22,9 +22,9 @@ void AFloatingPlatform::BeginPlay()
 	EndPoint += StartPoint;
 
 	bIsMoving = false;
-	GetWorldTimerManager().SetTimer(InterpTimer, this, &AFloatingPlatform::ToggleInterping, InterpTime);
+	//GetWorldTimerManager().SetTimer(InterpTimer, this, &AFloatingPlatform::ToggleMovement, WaitTime);
+	GetWorldTimerManager().SetTimer(InterpTimer, this, &AFloatingPlatform::ToggleMovement, WaitTime);
 
-	Distance = (EndPoint - StartPoint).Size();
 }
 
 // Called every frame
@@ -32,25 +32,24 @@ void AFloatingPlatform::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-
-
 	if (bIsMoving) {
 		// Move the platform towards the End Point
 		FVector CurrentLocation = GetActorLocation();
 		FVector Interp = FMath::VInterpTo(CurrentLocation, EndPoint, DeltaTime, InterpSpeed);
 		SetActorLocation(Interp);
 
-		float DistanceTravaled = (GetActorLocation() - StartPoint).Size();
-		if (Distance - DistanceTravaled < 0.5f) {
-			ToggleInterping();
-			GetWorldTimerManager().SetTimer(InterpTimer, this, &AFloatingPlatform::ToggleInterping, InterpTime);
+		// Check if the platform has reached the End Point
+		if ((GetActorLocation() - EndPoint).Size() < 0.5f) {
+			ToggleMovement();
+			GetWorldTimerManager().SetTimer(InterpTimer, this, &AFloatingPlatform::ToggleMovement, WaitTime);
 			SwapElements(StartPoint, EndPoint);
 		}
+
 	}
 
 }
 
-void AFloatingPlatform::ToggleInterping() {
+void AFloatingPlatform::ToggleMovement() {
 	bIsMoving = !bIsMoving;
 }
 

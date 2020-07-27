@@ -31,19 +31,16 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Platform")
 	float InterpSpeed{};
 	
-	/** Interpolation speed */
+	/** Time the platform will stay still before it starts moving again */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Platform")
-	float InterpTime{};
+	float WaitTime{};
 
 	/** Timer handle for the interpolation */
 	FTimerHandle InterpTimer;
 
 	/** Whether the platform is done interping on not */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Platform")
-	bool bIsInterping{};
-
-	/** The distance the platform needs to travel */
-	float Distance{};
+	bool bIsMoving{};
 
 protected:
 	// Called when the game starts or when spawned
@@ -56,8 +53,14 @@ public:
 	/// <summary>
 	/// Toggle the value of bIsInterping
 	/// </summary>
-	void ToggleInterping();
+	void ToggleMovement();
 
+	/// <summary>
+	/// Swap 2 elements of the same type T
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <param name="Element1"></param>
+	/// <param name="Element2"></param>
 	template <typename T>
 	void SwapElements(T& Element1, T& Element2);
 };
