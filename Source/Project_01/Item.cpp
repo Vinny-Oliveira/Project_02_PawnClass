@@ -3,6 +3,7 @@
 
 #include "Item.h"
 #include "Components/SphereComponent.h"
+#include "Particles/ParticleSystemComponent.h" 
 
 // Sets default values
 AItem::AItem()
@@ -12,6 +13,12 @@ AItem::AItem()
 
 	CollisionVolume = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionVolume"));
 	RootComponent = CollisionVolume;
+
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	Mesh->SetupAttachment(GetRootComponent());
+
+	IdleParticlesComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("IdleParticlesComponent"));
+	IdleParticlesComponent->SetupAttachment(GetRootComponent());
 }
 
 // Called when the game starts or when spawned
