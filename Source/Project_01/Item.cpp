@@ -9,7 +9,8 @@
 
 // Sets default values
 AItem::AItem()
-{
+	: bCanRotate{ false }, RotationRate{ 45.f } {
+
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -37,6 +38,11 @@ void AItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (bCanRotate) {
+		FRotator Rotation = GetActorRotation();
+		Rotation.Yaw += DeltaTime * RotationRate;
+		SetActorRotation(Rotation);
+	}
 }
 
 void AItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
