@@ -23,9 +23,16 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Item | Mesh")
 	UStaticMeshComponent* Mesh{ nullptr };
 
-	/** Particles of the item */
+	/** Idle Particle component of the item */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Particles")
-	UParticleSystemComponent* IdleParticlesComponent{ nullptr };
+	class UParticleSystemComponent* IdleParticlesComponent{ nullptr };
+
+	/** Particles when the item is overlapped */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Particles")
+	class UParticleSystem* OverlapParticles{ nullptr };
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Sounds")
+	class USoundCue* OverlapSound{ nullptr };
 
 protected:
 	// Called when the game starts or when spawned
