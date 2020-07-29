@@ -18,6 +18,10 @@ public:
 
 	AExplosive();
 
+	/** Damage dealt by explosion */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
+	float Damage{};
+
 	/** Event to detect when the switch is stepped on */
 	// UFUNCTION() - No need to use UFUNCTION macro, because the parent function is already a UFUNCTION
 	virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;

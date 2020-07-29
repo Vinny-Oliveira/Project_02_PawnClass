@@ -98,4 +98,14 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+	void Die();
+
+	void DecrementHealth(float Amount);
+
+	void IncrementCoins(int32 Amount);
+
+	//template<typename T>
+	typedef void (*Function)(float);
+
+	static void OnValidMain(AActor* Actor, AMain::Function Func, float Input);
 };

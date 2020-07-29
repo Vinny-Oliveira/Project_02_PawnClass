@@ -111,3 +111,29 @@ void AMain::TurnAtRate(float Rate) {
 void AMain::LookUpAtRate(float Rate) {
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
+
+void AMain::Die() {
+
+}
+
+void AMain::DecrementHealth(float Amount) {
+	Health -= Amount;
+
+	// Check if the character dies
+	if (Health <= 0.f) {
+		Die();
+	}
+}
+
+void AMain::IncrementCoins(int32 Amount) {
+	Coins += Amount;
+}
+
+void AMain::OnValidMain(AActor* Actor, AMain::Function Func, float Input) {
+	if (Actor) {
+		AMain* Main = Cast<AMain>(Actor);
+		if (Main) {
+			Main->Func(Input);
+		}
+	}
+}
