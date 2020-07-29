@@ -35,19 +35,19 @@ public:
 	/* Player Stats
 	*/
 
-	UPROPERTY(EditAnywhere, Category = "Player Stats")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Stats")
 	float Health{};
 	
-	UPROPERTY(EditDefaultsOnly, Category = "Player Stats")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player Stats")
 	float MaxHealth{};
 
-	UPROPERTY(EditAnywhere, Category = "Player Stats")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Stats")
 	float Stamina{};
 
-	UPROPERTY(EditDefaultsOnly, Category = "Player Stats")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player Stats")
 	float MaxStamina{};
 
-	UPROPERTY(EditAnywhere, Category = "Player Stats")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Stats")
 	int32 Coins{};
 
 protected:
