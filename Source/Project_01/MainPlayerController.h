@@ -18,7 +18,7 @@ public:
 
 	/** Reference to the UMG asset in the editor */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
-	TSubClassOf<class UUserWidget> HUDOverlayAsset;
+	TSubclassOf<class UUserWidget> HUDOverlayAsset;
 
 	/** Variable to hold the widget after creating it */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
