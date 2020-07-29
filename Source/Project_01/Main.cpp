@@ -9,7 +9,13 @@
 
 // Sets default values
 AMain::AMain()
-	: BaseTurnRate{ 65.f }, BaseLookUpRate{ 65.f } {
+	: BaseTurnRate{ 65.f },
+	BaseLookUpRate{ 65.f },
+	MaxHealth{ 100.f },
+	Health{ 65.f },
+	MaxStamina{ 350.f },
+	Stamina{ 120.f },
+	Coins{ 0 } {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
