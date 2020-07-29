@@ -129,11 +129,3 @@ void AMain::IncrementCoins(int32 Amount) {
 	Coins += Amount;
 }
 
-void AMain::OnValidMain(AActor* Actor, AMain::Function Func, float Input) {
-	if (Actor) {
-		AMain* Main = Cast<AMain>(Actor);
-		if (Main) {
-			Main->Func(Input);
-		}
-	}
-}

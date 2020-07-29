@@ -104,8 +104,6 @@ public:
 
 	void IncrementCoins(int32 Amount);
 
-	//template<typename T>
-	typedef void (*Function)(float);
+	typedef void (AMain::*Function)(float);
 
-	static void OnValidMain(AActor* Actor, AMain::Function Func, float Input);
 };
