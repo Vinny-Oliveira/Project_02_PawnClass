@@ -104,6 +104,6 @@ public:
 
 	void IncrementCoins(int32 Amount);
 
-	typedef void (AMain::*Function)(float);
+	//typedef void (AMain::*Function)(float);
 
 };

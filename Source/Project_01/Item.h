@@ -61,6 +61,6 @@ public:
 
 	class AMain* Main { nullptr };
 
-	UFUNCTION()
-	void ValidateActors(AActor* OtherActor, AMain::Function* Func, float InputOfFunc);
+	//UFUNCTION()
+	//void ValidateActors(AActor* OtherActor, AMain::Function* Func, float InputOfFunc);
 };
