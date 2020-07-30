@@ -121,6 +121,7 @@ void AMain::DecrementHealth(float Amount) {
 
 	// Check if the character dies
 	if (Health <= 0.f) {
+		Health = 0.f;
 		Die();
 	}
 }

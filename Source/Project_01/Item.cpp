@@ -6,7 +6,7 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
-#include "Main.h"
+//#include "Main.h"
 
 // Sets default values
 AItem::AItem()
