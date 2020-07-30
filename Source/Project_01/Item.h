@@ -59,7 +59,7 @@ public:
 	UFUNCTION()
 	virtual void OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-	//class AMain* Main { nullptr };
+	class AMain* Main { nullptr };
 
 	//UFUNCTION()
 	//void ValidateActors(AActor* OtherActor, AMain::Function* Func, float InputOfFunc);
