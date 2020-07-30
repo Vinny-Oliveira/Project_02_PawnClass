@@ -6,7 +6,6 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
-#include "Main.h"
 
 // Sets default values
 AItem::AItem()
@@ -64,13 +63,4 @@ void AItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 
 void AItem::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
 	UE_LOG(LogTemp, Warning, TEXT("OnOverlapEnd Called"));
-}
-
-void AItem::ValidateActors(AActor* OtherActor, AMain::Function* Func, float InputOfFunc) {
-	if (OtherActor) {
-		AMain* Main = Cast<AMain>(OtherActor);
-		if (Main) {
-			Main->Func(InputOfFunc);
-		}
-	}
 }
