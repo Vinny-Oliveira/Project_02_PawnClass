@@ -66,11 +66,11 @@ void AItem::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* Other
 	UE_LOG(LogTemp, Warning, TEXT("OnOverlapEnd Called"));
 }
 
-//void AItem::ValidateActors(AActor* OtherActor, AMain::Function* Func, float InputOfFunc) {
-//	if (OtherActor) {
-//		AMain* Main = Cast<AMain>(OtherActor);
-//		if (Main) {
-//			Main->Func(InputOfFunc);
-//		}
-//	}
-//}
+void AItem::ValidateActors(AActor* OtherActor, AMain::Function* Func, float InputOfFunc) {
+	if (OtherActor) {
+		AMain* Main = Cast<AMain>(OtherActor);
+		if (Main) {
+			Main->Func(InputOfFunc);
+		}
+	}
+}
