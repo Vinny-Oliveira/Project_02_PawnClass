@@ -113,7 +113,7 @@ void AMain::LookUpAtRate(float Rate) {
 }
 
 void AMain::Die() {
-
+	UE_LOG(LogTemp, Warning, TEXT("DEAD"));
 }
 
 void AMain::DecrementHealth(float Amount) {
