@@ -23,10 +23,6 @@ public:
 	// Sets default values for this character's properties
 	AMain();
 
-	/** Enum for the movement state of the character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadWritem, Category = "Enums")
-	EMovementStatus MovementStatus{ EMovementStatus::EMS_MAX };
-
 	/** Camera boom positioning the camera behind the player */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom{ nullptr };
@@ -42,6 +38,22 @@ public:
 	/** Rate of looking up/down speed (%) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	float BaseLookUpRate{};
+
+	/** Enum for the movement state of the character */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWritem, Category = "Enums")
+		EMovementStatus MovementStatus {
+		EMovementStatus::EMS_MAX
+	};
+
+	/** Speed for regular run */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Running")
+	float RunningSpeed{};
+
+	/** Speed for fast sprinting */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Running")
+	float SprintingSpeed{};
+
+	bool bShiftKeyDown{};
 
 	/**
 	/* Player Stats
@@ -111,6 +123,16 @@ public:
 	/// </summary>
 	/// <param name="Rate">This is a normalized look up/down rate</param>
 	void LookUpAtRate(float Rate);
+
+	/// <summary>
+	/// Press shift down to enable sprint
+	/// </summary>
+	void ShiftKeyDown();
+	
+	/// <summary>
+	/// Release shift to stop sprint
+	/// </summary>
+	void ShiftKeyUp();
 
 	/** Getters for CameraBoom and FollowCamera */
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }

@@ -17,7 +17,9 @@ AMain::AMain()
 	Stamina{ 120.f },
 	Coins{ 0 },
 	RunningSpeed{ 650.f },
-	SprintingSpeed{ 950.f } {
+	SprintingSpeed{ 950.f },
+	bShiftKeyDown{ false } {
+
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -84,6 +86,11 @@ void AMain::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	// Bind jump
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	
+	// Bind sprint
+	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &AMain::ShiftKeyDown);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AMain::ShiftKeyUp);
+
 }
 
 void AMain::MoveInDirection(float Value, EAxis::Type Axis) {
@@ -140,4 +147,12 @@ void AMain::SetMovementStatus(EMovementStatus Status) {
 	} else {
 		GetCharacterMovement()->MaxWalkSpeed = RunningSpeed;
 	}
+}
+
+void AMain::ShiftKeyDown() {
+	bShiftKeyDown = true;
+}
+
+void AMain::ShiftKeyUp() {
+	bShiftKeyDown = false;
 }
