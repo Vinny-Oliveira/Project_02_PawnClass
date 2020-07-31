@@ -15,7 +15,9 @@ AMain::AMain()
 	Health{ 65.f },
 	MaxStamina{ 350.f },
 	Stamina{ 120.f },
-	Coins{ 0 } {
+	Coins{ 0 },
+	RunningSpeed{ 650.f },
+	SprintingSpeed{ 950.f } {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -128,4 +130,14 @@ void AMain::DecrementHealth(float Amount) {
 
 void AMain::IncrementCoins(int32 Amount) {
 	Coins += Amount;
+}
+
+void AMain::SetMovementStatus(EMovementStatus Status) {
+	MovementStatus = Status;
+
+	if (MovementStatus == EMovementStatus::EMS_Sprinting) {
+		GetCharacterMovement()->MaxWalkSpeed = SprintingSpeed;
+	} else {
+		GetCharacterMovement()->MaxWalkSpeed = RunningSpeed;
+	}
 }

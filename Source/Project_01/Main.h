@@ -6,6 +6,14 @@
 #include "GameFramework/Character.h"
 #include "Main.generated.h"
 
+UENUM(BlueprintType)
+enum class EMovementStatus : uint8 {
+	EMS_Normal UMETA(DisplayName = "Normal"),
+	EMS_Sprinting UMETA(DisplayName = "Sprinting"),
+	
+	EMS_MAX UMETA(DisplayName = "DefaultMAX")
+};
+
 UCLASS()
 class PROJECT_01_API AMain : public ACharacter
 {
@@ -14,6 +22,10 @@ class PROJECT_01_API AMain : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AMain();
+
+	/** Enum for the movement state of the character */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWritem, Category = "Enums")
+	EMovementStatus MovementStatus{ EMovementStatus::EMS_MAX };
 
 	/** Camera boom positioning the camera behind the player */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -69,6 +81,12 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	/// <summary>
+	/// Set movement status and running speed
+	/// </summary>
+	/// <param name="Status"></param>
+	void SetMovementStatus(EMovementStatus Status);
 
 	/// <summary>
 	/// Called for forward and backwards input
