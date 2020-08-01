@@ -7,6 +7,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Weapon.h"
 
 // Sets default values
 AMain::AMain()
@@ -20,6 +21,7 @@ AMain::AMain()
 	RunningSpeed{ 650.f },
 	SprintingSpeed{ 950.f },
 	bShiftKeyDown{ false },
+	bLeftMouseBtnDown{ false },
 	MovementStatus{ EMovementStatus::EMS_Normal },
 	StaminaStatus{ EStaminaStatus::ESS_Normal },
 	StaminaDrainRate{ 25.f },
@@ -96,6 +98,11 @@ void AMain::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	// Bind sprint
 	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &AMain::ShiftKeyDown);
 	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &AMain::ShiftKeyUp);
+	
+	// Bind sprint
+	PlayerInputComponent->BindAction("LeftMouseBtn", IE_Pressed, this, &AMain::LeftMouseBtnDown);
+	PlayerInputComponent->BindAction("LeftMouseBtn", IE_Released, this, &AMain::LeftMouseBtnUp);
+
 
 }
 
@@ -157,12 +164,10 @@ void AMain::SetMovementStatus(EMovementStatus Status) {
 
 void AMain::ShiftKeyDown() {
 	bShiftKeyDown = true;
-	//SetMovementStatus(EMovementStatus::EMS_Sprinting);
 }
 
 void AMain::ShiftKeyUp() {
 	bShiftKeyDown = false;
-	//SetMovementStatus(EMovementStatus::EMS_Normal);
 }
 
 void AMain::HandleStaminaStatus(float DeltaTime) {
@@ -239,4 +244,18 @@ void AMain::ShowPickupLocations() {
 		UKismetSystemLibrary::DrawDebugSphere(this, Location, 25.f, 12, FLinearColor::Red, 5.f, 2.f);
 	}
 	
+}
+
+void AMain::LeftMouseBtnDown() {
+	bLeftMouseBtnDown = true;
+	if (ActiveOverlappingItem) {
+		AWeapon* Weapon = Cast<AWeapon>(ActiveOverlappingItem);
+		if (Weapon) {
+			Weapon->Equip(this);
+		}
+	}
+}
+
+void AMain::LeftMouseBtnUp() {
+	bLeftMouseBtnDown = false;
 }

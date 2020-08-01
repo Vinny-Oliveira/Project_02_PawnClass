@@ -83,6 +83,13 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Items)
 	class AWeapon* EquippedWeapon{ nullptr };
 
+	/** Item the character is overlapping with */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Items)
+	class AItem* ActiveOverlappingItem{ nullptr };
+
+	/** Boolean to check if the left mouse button is being pressed */
+	bool bLeftMouseBtnDown{};
+
 	/**
 	/* Player Stats
 	*/
@@ -141,6 +148,12 @@ public:
 	FORCEINLINE void SetEquippedWeapon(AWeapon* WeaponToSet) { EquippedWeapon = WeaponToSet; }
 
 	/// <summary>
+	/// Setter for the Active Overlapping Item
+	/// </summary>
+	/// <param name="Item"></param>
+	FORCEINLINE void SetActiveOverlappingItem(AItem* Item) { ActiveOverlappingItem = Item; }
+
+	/// <summary>
 	/// Called for forward and backwards input
 	/// </summary>
 	/// <param name="value"></param>
@@ -173,6 +186,16 @@ public:
 	/// Release shift to stop sprint
 	/// </summary>
 	void ShiftKeyUp();
+
+	/// <summary>
+	/// Call actions for when the left mouse button is pressed
+	/// </summary>
+	void LeftMouseBtnDown();
+	
+	/// <summary>
+	/// Call actions for when the left mouse button is released
+	/// </summary>
+	void LeftMouseBtnUp();
 
 	/// <summary>
 	/// Handle how the status of the stamina bar

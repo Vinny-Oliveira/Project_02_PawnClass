@@ -59,4 +59,9 @@ public:
 	UFUNCTION()
 	virtual void OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	/// <summary>
+	/// Gets the Character the item is overlapping with
+	/// </summary>
+	UFUNCTION()
+	class AMain* GetValidCharacter(AActor* OtherActor);
 };

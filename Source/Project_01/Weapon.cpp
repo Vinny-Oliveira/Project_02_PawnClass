@@ -5,6 +5,8 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Main.h"
 #include "Engine/SkeletalMeshSocket.h"
+#include "Sound/SoundCue.h"
+#include "Kismet/GameplayStatics.h"
 
 AWeapon::AWeapon() {
 	SkeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMesh"));
@@ -15,16 +17,17 @@ AWeapon::AWeapon() {
 void AWeapon::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
 	Super::OnOverlapBegin(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 
-	if (OtherActor) {
-		AMain* Main = Cast<AMain>(OtherActor);
-		if (Main) {
-			Equip(Main);
-		}
+	if (AMain * Main{ GetValidCharacter(OtherActor) }) {
+		Main->SetActiveOverlappingItem(this);
 	}
 }
 
 void AWeapon::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
 	Super::OnOverlapEnd(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex);
+
+	if (AMain* Main{ GetValidCharacter(OtherActor) }) {
+		Main->SetActiveOverlappingItem(nullptr);
+	}
 }
 
 void AWeapon::Equip(AMain* Character) {
@@ -33,10 +36,17 @@ void AWeapon::Equip(AMain* Character) {
 		SkeletalMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
 		SkeletalMesh->SetSimulatePhysics(false);
 
+		// Attach the weapon to the character's socket
 		const USkeletalMeshSocket* RightHandSocket{ Character->GetMesh()->GetSocketByName("RightHandSocket") };
 		if (RightHandSocket) {
 			RightHandSocket->AttachActor(this, Character->GetMesh());
 			bCanRotate = false;
+			Character->SetEquippedWeapon(this);
+
+			// Play a sound when the weapon is equipped
+			if (OnEquipSound) {
+				UGameplayStatics::PlaySound2D(this, OnEquipSound);
+			}
 		}
 	}
 }
