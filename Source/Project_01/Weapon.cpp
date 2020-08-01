@@ -44,7 +44,6 @@ void AWeapon::Equip(AMain* Character) {
 		// Attach the weapon to the character's socket
 		const USkeletalMeshSocket* RightHandSocket{ Character->GetMesh()->GetSocketByName("RightHandSocket") };
 		if (RightHandSocket) {
-			//Character->GetEquippedWeapon()->Destroy();
 			RightHandSocket->AttachActor(this, Character->GetMesh());
 			bCanRotate = false;
 			Character->SetEquippedWeapon(this);

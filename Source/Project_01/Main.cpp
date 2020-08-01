@@ -260,3 +260,11 @@ void AMain::LeftMouseBtnDown() {
 void AMain::LeftMouseBtnUp() {
 	bLeftMouseBtnDown = false;
 }
+
+void AMain::SetEquippedWeapon(AWeapon* WeaponToSet) { 
+	if (EquippedWeapon) {
+		EquippedWeapon->Destroy();
+	}
+	
+	EquippedWeapon = WeaponToSet;
+}

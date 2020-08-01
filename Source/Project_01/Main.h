@@ -151,7 +151,7 @@ public:
 	/// Setter for the Equipped Weapon
 	/// </summary>
 	/// <param name="WeaponToSet"></param>
-	FORCEINLINE void SetEquippedWeapon(AWeapon* WeaponToSet) { EquippedWeapon = WeaponToSet; }
+	void SetEquippedWeapon(AWeapon* WeaponToSet);
 
 	/// <summary>
 	/// Setter for the Active Overlapping Item
