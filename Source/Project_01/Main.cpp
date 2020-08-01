@@ -202,7 +202,7 @@ void AMain::HandleStaminaStatus(float DeltaTime) {
 		} else { // Replenish stamina and do not sprint
 			Stamina += DeltaStamina;
 			SetMovementStatus(EMovementStatus::EMS_Normal);
-			if (Stamina > MaxStamina) {
+			if (Stamina > MinSprintStamina) {
 				SetStaminaStatus(EStaminaStatus::ESS_Normal);
 			}
 		}
