@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
 AMain::AMain()
@@ -59,6 +60,7 @@ void AMain::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	UKismetSystemLibrary::DrawDebugSphere(this, GetActorLocation() + FVector(0.f, 0.f, 75.f), 25.f, 12, FLinearColor::Red, 5.f, 2.f);
 }
 
 // Called every frame
