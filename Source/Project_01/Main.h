@@ -142,6 +142,12 @@ public:
 	FORCEINLINE void SetStaminaStatus(EStaminaStatus Status) { StaminaStatus = Status; }
 
 	/// <summary>
+	/// Getter for the EquippedWeapon
+	/// </summary>
+	/// <returns></returns>
+	FORCEINLINE AWeapon* GetEquippedWeapon() { return EquippedWeapon; }
+
+	/// <summary>
 	/// Setter for the Equipped Weapon
 	/// </summary>
 	/// <param name="WeaponToSet"></param>

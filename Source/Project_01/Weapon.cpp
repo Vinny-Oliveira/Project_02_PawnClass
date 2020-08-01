@@ -10,7 +10,7 @@
 #include "Particles/ParticleSystemComponent.h"
 
 AWeapon::AWeapon()
-	: bCanEmitParticles{ false } {
+	: bCanEmitParticles{ false }, WeaponState{ EWeaponState::EWS_Pickup } {
 	SkeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMesh"));
 	SkeletalMesh->SetupAttachment(GetRootComponent());
 
@@ -19,9 +19,12 @@ AWeapon::AWeapon()
 void AWeapon::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
 	Super::OnOverlapBegin(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 
-	if (AMain * Main{ GetValidCharacter(OtherActor) }) {
-		Main->SetActiveOverlappingItem(this);
+	if (GetWeaponState() == EWeaponState::EWS_Pickup) {
+		if (AMain* Main{ GetValidCharacter(OtherActor) }) {
+			Main->SetActiveOverlappingItem(this);
+		}
 	}
+
 }
 
 void AWeapon::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
@@ -41,9 +44,12 @@ void AWeapon::Equip(AMain* Character) {
 		// Attach the weapon to the character's socket
 		const USkeletalMeshSocket* RightHandSocket{ Character->GetMesh()->GetSocketByName("RightHandSocket") };
 		if (RightHandSocket) {
+			//Character->GetEquippedWeapon()->Destroy();
 			RightHandSocket->AttachActor(this, Character->GetMesh());
 			bCanRotate = false;
 			Character->SetEquippedWeapon(this);
+			Character->SetActiveOverlappingItem(nullptr);
+			SetWeaponState(EWeaponState::EWS_Equipped);
 
 			// Play a sound when the weapon is equipped
 			if (OnEquipSound) {

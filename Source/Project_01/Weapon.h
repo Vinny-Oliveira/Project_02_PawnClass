@@ -6,6 +6,14 @@
 #include "Item.h"
 #include "Weapon.generated.h"
 
+UENUM(BlueprintType)
+enum class EWeaponState : uint8 {
+	EWS_Pickup		UMETA(DisplayName = "Pickup"),
+	EWS_Equipped	UMETA(DisplayName = "Equipped"),
+	
+	EWS_MAX			UMETA(DisplayName = "DefaultMAX")
+};
+
 /**
  * 
  */
@@ -16,6 +24,10 @@ class PROJECT_01_API AWeapon : public AItem
 	
 public:
 	AWeapon();
+
+	/** Enum for the state of the weapon */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enums")
+	EWeaponState WeaponState{ EWeaponState::EWS_Pickup };
 
 	/** Skeletal mesh of the weapon */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "SkeletalMesh")
@@ -28,6 +40,20 @@ public:
 	/** Boolean to set if the weapon can emit particles or not */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Particles")
 	bool bCanEmitParticles{};
+
+public:
+
+	/// <summary>
+	/// Getter for the WeaponState
+	/// </summary>
+	/// <returns></returns>
+	FORCEINLINE EWeaponState GetWeaponState() { return WeaponState; }
+
+	/// <summary>
+	/// Setter of the WeaponState
+	/// </summary>
+	/// <param name="State"></param>
+	FORCEINLINE void SetWeaponState(EWeaponState State) { WeaponState = State; }
 
 	/** Event to detect when the switch is stepped on */
 	virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
