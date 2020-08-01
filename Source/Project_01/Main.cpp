@@ -252,6 +252,7 @@ void AMain::LeftMouseBtnDown() {
 		AWeapon* Weapon = Cast<AWeapon>(ActiveOverlappingItem);
 		if (Weapon) {
 			Weapon->Equip(this);
+			SetActiveOverlappingItem(nullptr);
 		}
 	}
 }

@@ -7,8 +7,10 @@
 #include "Engine/SkeletalMeshSocket.h"
 #include "Sound/SoundCue.h"
 #include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystemComponent.h"
 
-AWeapon::AWeapon() {
+AWeapon::AWeapon()
+	: bCanEmitParticles{ false } {
 	SkeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMesh"));
 	SkeletalMesh->SetupAttachment(GetRootComponent());
 
@@ -46,6 +48,10 @@ void AWeapon::Equip(AMain* Character) {
 			// Play a sound when the weapon is equipped
 			if (OnEquipSound) {
 				UGameplayStatics::PlaySound2D(this, OnEquipSound);
+			}
+
+			if (!bCanEmitParticles) {
+				IdleParticlesComponent->Deactivate();
 			}
 		}
 	}
