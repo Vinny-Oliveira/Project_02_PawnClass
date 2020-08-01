@@ -35,7 +35,7 @@ void AWeapon::Equip(AMain* Character) {
 
 		const USkeletalMeshSocket* RightHandSocket{ Character->GetMesh()->GetSocketByName("RightHandSocket") };
 		if (RightHandSocket) {
-			RightHandSocket->AttachActor(this, SkeletalMesh);
+			RightHandSocket->AttachActor(this, Character->GetMesh());
 			bCanRotate = false;
 		}
 	}
