@@ -14,6 +14,16 @@ enum class EMovementStatus : uint8 {
 	EMS_MAX UMETA(DisplayName = "DefaultMAX")
 };
 
+UENUM(BlueprintType)
+enum class EStaminaStatus : uint8 {
+	ESS_Normal UMETA(DisplayName = "Normal"),
+	ESS_BelowMinimum UMETA(DisplayName = "BelowMinimum"),
+	ESS_Exhausted UMETA(DisplayName = "Exhausted"),
+	ESS_ExhaustedRecovering UMETA(DisplayName = "ExhaustedRecovering"),
+	
+	ESS_MAX UMETA(DisplayName = "DefaultMax")
+};
+
 UCLASS()
 class PROJECT_01_API AMain : public ACharacter
 {
@@ -42,6 +52,10 @@ public:
 	/** Enum for the movement state of the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enums")
 	EMovementStatus MovementStatus { EMovementStatus::EMS_Normal };
+	
+	/** Enum for the movement state of the character */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enums")
+	EStaminaStatus StaminaStatus { EStaminaStatus::ESS_Normal };
 
 	/** Speed for regular run */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Running")
@@ -51,7 +65,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Running")
 	float SprintingSpeed{};
 
-	//bool bShiftKeyDown{};
+	/** Rate at which stamina is drained while the character sprints */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	float StaminaDrainRate{};
+	
+	/** Minimum stamina that allows sprinting after recovery */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	float MinSprintStamina{};
+
+	bool bShiftKeyDown{};
 
 	/**
 	/* Player Stats
@@ -98,6 +120,8 @@ public:
 	/// <param name="Status"></param>
 	void SetMovementStatus(EMovementStatus Status);
 
+	FORCEINLINE void SetStaminaStatus(EStaminaStatus Status) { StaminaStatus = Status; }
+
 	/// <summary>
 	/// Called for forward and backwards input
 	/// </summary>
@@ -131,6 +155,12 @@ public:
 	/// Release shift to stop sprint
 	/// </summary>
 	void ShiftKeyUp();
+
+	/// <summary>
+	/// Handle how the status of the stamina bar
+	/// </summary>
+	/// <param name="DeltaTime"></param>
+	void HandleStaminaStatus(float DeltaTime);
 
 	/** Getters for CameraBoom and FollowCamera */
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }

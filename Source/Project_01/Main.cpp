@@ -13,14 +13,16 @@ AMain::AMain()
 	BaseLookUpRate{ 65.f },
 	MaxHealth{ 100.f },
 	Health{ 65.f },
-	MaxStamina{ 350.f },
+	MaxStamina{ 150.f },
 	Stamina{ 120.f },
 	Coins{ 0 },
 	RunningSpeed{ 650.f },
 	SprintingSpeed{ 950.f },
-	//bShiftKeyDown{ false },
-	MovementStatus{ EMovementStatus::EMS_Normal }
-{
+	bShiftKeyDown{ false },
+	MovementStatus{ EMovementStatus::EMS_Normal },
+	StaminaStatus{ EStaminaStatus::ESS_Normal },
+	StaminaDrainRate{ 25.f },
+	MinSprintStamina{ 50.f } {
 
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -64,6 +66,7 @@ void AMain::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	HandleStaminaStatus(DeltaTime);
 }
 
 // Called to bind functionality to input
@@ -152,11 +155,79 @@ void AMain::SetMovementStatus(EMovementStatus Status) {
 }
 
 void AMain::ShiftKeyDown() {
-	//bShiftKeyDown = true;
-	SetMovementStatus(EMovementStatus::EMS_Sprinting);
+	bShiftKeyDown = true;
+	//SetMovementStatus(EMovementStatus::EMS_Sprinting);
 }
 
 void AMain::ShiftKeyUp() {
-	//bShiftKeyDown = false;
-	SetMovementStatus(EMovementStatus::EMS_Normal);
+	bShiftKeyDown = false;
+	//SetMovementStatus(EMovementStatus::EMS_Normal);
+}
+
+void AMain::HandleStaminaStatus(float DeltaTime) {
+	float DeltaStamina{ StaminaDrainRate * DeltaTime };
+
+	switch (StaminaStatus) {
+	case EStaminaStatus::ESS_Normal:
+		if (bShiftKeyDown) { // Decrease stamina and sprint
+			Stamina -= DeltaStamina;
+			SetMovementStatus(EMovementStatus::EMS_Sprinting);
+
+			// Threshhold to change color
+			if (Stamina < MinSprintStamina) {
+				SetStaminaStatus(EStaminaStatus::ESS_BelowMinimum);
+			}
+
+		} else { // Replenish stamina and do not sprint
+			Stamina += DeltaStamina;
+			SetMovementStatus(EMovementStatus::EMS_Normal);
+			if (Stamina > MaxStamina) {
+				Stamina = MaxStamina;
+			}
+		}
+		break;
+
+	case EStaminaStatus::ESS_BelowMinimum:
+		if (bShiftKeyDown) { // Decrease stamina and sprint
+			Stamina -= DeltaStamina;
+			SetMovementStatus(EMovementStatus::EMS_Sprinting);
+
+			// Character exhausted
+			if (Stamina < 0.f) {
+				SetStaminaStatus(EStaminaStatus::ESS_Exhausted);
+				SetMovementStatus(EMovementStatus::EMS_Normal);
+				Stamina = 0.f;
+			}
+
+		} else { // Replenish stamina and do not sprint
+			Stamina += DeltaStamina;
+			SetMovementStatus(EMovementStatus::EMS_Normal);
+			if (Stamina > MaxStamina) {
+				SetStaminaStatus(EStaminaStatus::ESS_Normal);
+			}
+		}
+		break;
+
+	case EStaminaStatus::ESS_Exhausted:
+		// Do not sprint, zero out the Stamina if shift is pressed, and go to recovery state if shift key is let go
+		SetMovementStatus(EMovementStatus::EMS_Normal);
+		if (bShiftKeyDown) {
+			Stamina = 0.f;
+		} else {
+			SetStaminaStatus(EStaminaStatus::ESS_ExhaustedRecovering);
+		}
+		break;
+
+	case EStaminaStatus::ESS_ExhaustedRecovering:
+		// Replenish stamina and get back to normal if past the threshold
+		Stamina += DeltaStamina;
+		SetMovementStatus(EMovementStatus::EMS_Normal);
+		if (Stamina > MinSprintStamina) {
+			SetStaminaStatus(EStaminaStatus::ESS_Normal);
+		}
+		break;
+
+	default:
+		break;
+	}
 }
