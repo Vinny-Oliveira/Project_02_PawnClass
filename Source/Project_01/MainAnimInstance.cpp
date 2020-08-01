@@ -3,10 +3,15 @@
 
 #include "MainAnimInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Main.h"
 
 void UMainAnimInstance::CheckForPawn() {
 	if (Pawn == nullptr) {
 		Pawn = TryGetPawnOwner();
+		if (Pawn) {
+			Main = Cast<AMain>(Pawn);
+
+		}
 	}
 }
 
@@ -25,5 +30,9 @@ void UMainAnimInstance::UpdateAnimationProperties() {
 
 		// Check if the Pawn in in air
 		bIsInAir = Pawn->GetMovementComponent()->IsFalling();
+
+		if (Main == nullptr) {
+			Main = Cast<AMain>(Pawn);
+		}
 	}
 }

@@ -51,7 +51,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Running")
 	float SprintingSpeed{};
 
-	bool bShiftKeyDown{};
+	//bool bShiftKeyDown{};
 
 	/**
 	/* Player Stats

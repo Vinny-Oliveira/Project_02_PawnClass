@@ -18,7 +18,7 @@ AMain::AMain()
 	Coins{ 0 },
 	RunningSpeed{ 650.f },
 	SprintingSpeed{ 950.f },
-	bShiftKeyDown{ false },
+	//bShiftKeyDown{ false },
 	MovementStatus{ EMovementStatus::EMS_Normal }
 {
 
@@ -91,7 +91,7 @@ void AMain::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	
 	// Bind sprint
 	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &AMain::ShiftKeyDown);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AMain::ShiftKeyUp);
+	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &AMain::ShiftKeyUp);
 
 }
 
@@ -152,9 +152,11 @@ void AMain::SetMovementStatus(EMovementStatus Status) {
 }
 
 void AMain::ShiftKeyDown() {
-	bShiftKeyDown = true;
+	//bShiftKeyDown = true;
+	SetMovementStatus(EMovementStatus::EMS_Sprinting);
 }
 
 void AMain::ShiftKeyUp() {
-	bShiftKeyDown = false;
+	//bShiftKeyDown = false;
+	SetMovementStatus(EMovementStatus::EMS_Normal);
 }
