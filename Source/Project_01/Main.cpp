@@ -60,7 +60,6 @@ void AMain::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	UKismetSystemLibrary::DrawDebugSphere(this, GetActorLocation() + FVector(0.f, 0.f, 75.f), 25.f, 12, FLinearColor::Red, 5.f, 2.f);
 }
 
 // Called every frame
@@ -232,4 +231,12 @@ void AMain::HandleStaminaStatus(float DeltaTime) {
 	default:
 		break;
 	}
+}
+
+void AMain::ShowPickupLocations() {
+	//for (int32 i{ 0 }; i < PickupLocations.Num(); i++) { // TArray uses Num() to collect the number of items
+	for (auto Location : PickupLocations) {
+		UKismetSystemLibrary::DrawDebugSphere(this, Location, 25.f, 12, FLinearColor::Red, 5.f, 2.f);
+	}
+	
 }

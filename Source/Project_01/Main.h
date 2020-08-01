@@ -73,7 +73,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float MinSprintStamina{};
 
+	/** Boolean to check if the Shift key is being pressed or not */
 	bool bShiftKeyDown{};
+
+	/** TArray that stores the locations of the items picked up */
+	TArray<FVector> PickupLocations{};
 
 	/**
 	/* Player Stats
@@ -120,6 +124,10 @@ public:
 	/// <param name="Status"></param>
 	void SetMovementStatus(EMovementStatus Status);
 
+	/// <summary>
+	/// Setter for the StaminaStatus
+	/// </summary>
+	/// <param name="Status"></param>
 	FORCEINLINE void SetStaminaStatus(EStaminaStatus Status) { StaminaStatus = Status; }
 
 	/// <summary>
@@ -162,14 +170,33 @@ public:
 	/// <param name="DeltaTime"></param>
 	void HandleStaminaStatus(float DeltaTime);
 
-	/** Getters for CameraBoom and FollowCamera */
+	/// <summary>
+	/// Getter for CameraBoom
+	/// </summary>
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+
+	/// <summary>
+	/// Getters for FollowCamera
+	/// </summary>
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 	void Die();
 
+	/// <summary>
+	/// Decrease the health by an Amount
+	/// </summary>
+	/// <param name="Amount"></param>
 	void DecrementHealth(float Amount);
 
+	/// <summary>
+	/// Increase the coins by an Amount
+	/// </summary>
+	/// <param name="Amount"></param>
 	void IncrementCoins(int32 Amount);
 
+	/// <summary>
+	/// Display a debug sphere on the location of an item that has been picked up
+	/// </summary>
+	UFUNCTION(BlueprintCallable)
+	void ShowPickupLocations();
 };
