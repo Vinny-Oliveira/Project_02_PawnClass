@@ -16,6 +16,7 @@ void AExplosive::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor
 		AMain* Main = Cast<AMain>(OtherActor);
 		if (Main) {
 			Main->DecrementHealth(Damage);
+			Destroy();
 		}
 	}
 

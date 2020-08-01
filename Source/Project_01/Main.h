@@ -79,6 +79,10 @@ public:
 	/** TArray that stores the locations of the items picked up */
 	TArray<FVector> PickupLocations{};
 
+	/** Weapon equiped to the character */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Items)
+	class AWeapon* EquippedWeapon{ nullptr };
+
 	/**
 	/* Player Stats
 	*/
@@ -129,6 +133,12 @@ public:
 	/// </summary>
 	/// <param name="Status"></param>
 	FORCEINLINE void SetStaminaStatus(EStaminaStatus Status) { StaminaStatus = Status; }
+
+	/// <summary>
+	/// Setter for the Equipped Weapon
+	/// </summary>
+	/// <param name="WeaponToSet"></param>
+	FORCEINLINE void SetEquippedWeapon(AWeapon* WeaponToSet) { EquippedWeapon = WeaponToSet; }
 
 	/// <summary>
 	/// Called for forward and backwards input
