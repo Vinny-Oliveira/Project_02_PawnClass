@@ -18,7 +18,9 @@ AMain::AMain()
 	Coins{ 0 },
 	RunningSpeed{ 650.f },
 	SprintingSpeed{ 950.f },
-	bShiftKeyDown{ false } {
+	bShiftKeyDown{ false },
+	MovementStatus{ EMovementStatus::EMS_Normal }
+{
 
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;

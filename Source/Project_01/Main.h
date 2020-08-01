@@ -40,10 +40,8 @@ public:
 	float BaseLookUpRate{};
 
 	/** Enum for the movement state of the character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadWritem, Category = "Enums")
-		EMovementStatus MovementStatus {
-		EMovementStatus::EMS_MAX
-	};
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enums")
+	EMovementStatus MovementStatus { EMovementStatus::EMS_Normal };
 
 	/** Speed for regular run */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Running")
