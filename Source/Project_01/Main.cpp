@@ -172,10 +172,12 @@ void AMain::ShiftKeyUp() {
 
 void AMain::HandleStaminaStatus(float DeltaTime) {
 	float DeltaStamina{ StaminaDrainRate * DeltaTime };
+	float CurrentSpeed{ GetVelocity().Size() };
+	bool bIsInAir{ GetMovementComponent()->IsFalling() };
 
 	switch (StaminaStatus) {
 	case EStaminaStatus::ESS_Normal:
-		if (bShiftKeyDown) { // Decrease stamina and sprint
+		if (bShiftKeyDown && (CurrentSpeed > 0.f) && !bIsInAir) { // Decrease stamina and sprint
 			Stamina -= DeltaStamina;
 			SetMovementStatus(EMovementStatus::EMS_Sprinting);
 
@@ -194,7 +196,7 @@ void AMain::HandleStaminaStatus(float DeltaTime) {
 		break;
 
 	case EStaminaStatus::ESS_BelowMinimum:
-		if (bShiftKeyDown) { // Decrease stamina and sprint
+		if (bShiftKeyDown && (CurrentSpeed > 0.f) && !bIsInAir) { // Decrease stamina and sprint
 			Stamina -= DeltaStamina;
 			SetMovementStatus(EMovementStatus::EMS_Sprinting);
 
@@ -217,7 +219,7 @@ void AMain::HandleStaminaStatus(float DeltaTime) {
 	case EStaminaStatus::ESS_Exhausted:
 		// Do not sprint, zero out the Stamina if shift is pressed, and go to recovery state if shift key is let go
 		SetMovementStatus(EMovementStatus::EMS_Normal);
-		if (bShiftKeyDown) {
+		if (bShiftKeyDown && (CurrentSpeed > 0.f) && !bIsInAir) {
 			Stamina = 0.f;
 		} else {
 			SetStaminaStatus(EStaminaStatus::ESS_ExhaustedRecovering);

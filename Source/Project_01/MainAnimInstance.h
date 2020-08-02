@@ -16,7 +16,7 @@ class PROJECT_01_API UMainAnimInstance : public UAnimInstance
 	
 public:
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category = Movement)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
 	float MovementSpeed{};
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
