@@ -8,6 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Weapon.h"
+#include "Animation/AnimMontage.h"
 
 // Sets default values
 AMain::AMain()
@@ -22,6 +23,7 @@ AMain::AMain()
 	SprintingSpeed{ 950.f },
 	bShiftKeyDown{ false },
 	bLeftMouseBtnDown{ false },
+	bIsAttacking{ false },
 	MovementStatus{ EMovementStatus::EMS_Normal },
 	StaminaStatus{ EStaminaStatus::ESS_Normal },
 	StaminaDrainRate{ 25.f },
@@ -256,6 +258,8 @@ void AMain::LeftMouseBtnDown() {
 			Weapon->Equip(this);
 			SetActiveOverlappingItem(nullptr);
 		}
+	} else if (EquippedWeapon) { 
+		Attack();
 	}
 }
 
@@ -269,4 +273,14 @@ void AMain::SetEquippedWeapon(AWeapon* WeaponToSet) {
 	}
 	
 	EquippedWeapon = WeaponToSet;
+}
+
+void AMain::Attack() {
+	bIsAttacking = true;
+
+	UAnimInstance* AnimInstance{ GetMesh()->GetAnimInstance() };
+	if (AnimInstance && CombatMontage) {
+		AnimInstance->Montage_Play(CombatMontage, 1.35f);
+		AnimInstance->Montage_JumpToSection(FName("Attack_01"), CombatMontage);
+	}
 }

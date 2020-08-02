@@ -90,6 +90,14 @@ public:
 	/** Boolean to check if the left mouse button is being pressed */
 	bool bLeftMouseBtnDown{};
 
+	/** Boolean to check if the character is attacking */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Anims")
+	bool bIsAttacking{};
+
+	/** Reference to the montage with the combat animations */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Anims")
+	class UAnimMontage* CombatMontage{ nullptr };
+
 	/**
 	/* Player Stats
 	*/
@@ -238,4 +246,9 @@ public:
 	/// </summary>
 	UFUNCTION(BlueprintCallable)
 	void ShowPickupLocations();
+
+	/// <summary>
+	/// Play attack animations and deal damage
+	/// </summary>
+	void Attack();
 };
