@@ -109,7 +109,7 @@ void AMain::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 }
 
 void AMain::MoveInDirection(float Value, EAxis::Type Axis) {
-	if ((Controller != nullptr) && (Value != 0.f)) {
+	if ((Controller != nullptr) && (Value != 0.f) && (!bIsAttacking)) {
 		// Find out which way is forward (where the camera is pointing to)
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
@@ -276,11 +276,21 @@ void AMain::SetEquippedWeapon(AWeapon* WeaponToSet) {
 }
 
 void AMain::Attack() {
-	bIsAttacking = true;
+	if (!bIsAttacking) { // Do not attack if an attack animation is playing
+		bIsAttacking = true;
 
-	UAnimInstance* AnimInstance{ GetMesh()->GetAnimInstance() };
-	if (AnimInstance && CombatMontage) {
-		AnimInstance->Montage_Play(CombatMontage, 1.35f);
-		AnimInstance->Montage_JumpToSection(FName("Attack_01"), CombatMontage);
+		// Play attack animation
+		UAnimInstance* AnimInstance{ GetMesh()->GetAnimInstance() };
+		if (AnimInstance && CombatMontage) {
+			AnimInstance->Montage_Play(CombatMontage, 1.35f);
+			AnimInstance->Montage_JumpToSection(FName("Attack_01"), CombatMontage);
+		}
+	}
+}
+
+void AMain::AttackEnd() {
+	bIsAttacking = false;
+	if (bLeftMouseBtnDown) {
+		Attack(); // Attack again if the button is held down
 	}
 }

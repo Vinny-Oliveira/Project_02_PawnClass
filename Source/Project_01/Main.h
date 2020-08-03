@@ -251,4 +251,10 @@ public:
 	/// Play attack animations and deal damage
 	/// </summary>
 	void Attack();
+
+	/// <summary>
+	/// Trigger this function when the attack animation finishes
+	/// </summary>
+	UFUNCTION(BlueprintCallable)
+	void AttackEnd();
 };
