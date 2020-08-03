@@ -282,8 +282,26 @@ void AMain::Attack() {
 		// Play attack animation
 		UAnimInstance* AnimInstance{ GetMesh()->GetAnimInstance() };
 		if (AnimInstance && CombatMontage) {
-			AnimInstance->Montage_Play(CombatMontage, 1.35f);
-			AnimInstance->Montage_JumpToSection(FName("Attack_01"), CombatMontage);
+			int32 Section{ FMath::RandRange(0, 1) };
+			FName AnimName;
+
+			// Choose an attack animation randomly
+			switch (Section) {
+			case 0:
+				AnimName = FName("Attack_01");
+				break;
+
+			case 1:
+				AnimName = FName("Attack_02");
+				break;
+
+			default:
+				AnimName = FName("Attack_01");
+				break;
+			}
+
+			AnimInstance->Montage_Play(CombatMontage, 2.f);
+			AnimInstance->Montage_JumpToSection(AnimName, CombatMontage);
 		}
 	}
 }
