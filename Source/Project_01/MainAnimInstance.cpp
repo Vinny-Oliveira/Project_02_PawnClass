@@ -17,9 +17,6 @@ void UMainAnimInstance::CheckForPawn() {
 
 void UMainAnimInstance::NativeInitializeAnimation() {
 	UMainAnimInstance::CheckForPawn();
-	//AMain* num = GameUtilities::CheckForPawn2<AMain>(Pawn);
-	//float num = GameUtilities::CheckForPawn2<float>(Pawn);
-	//GameUtilities::CheckForPawn2(Pawn, Main);
 }
 
 void UMainAnimInstance::UpdateAnimationProperties() {

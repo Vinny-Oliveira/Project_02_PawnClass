@@ -2,21 +2,23 @@
 
 
 #include "GameUtilities.h"
-//#include "Main.h"
+#include "GameFramework/Pawn.h"
+#include "Animation/AnimInstance.h"
+#include "Main.h"
 
-GameUtilities::GameUtilities()
-{
-}
-
-GameUtilities::~GameUtilities()
-{
-}
+//GameUtilities::GameUtilities()
+//{
+//}
+//
+//GameUtilities::~GameUtilities()
+//{
+//}
 
 ////static T* GameUtilities::CheckForPawn2(APawn* Pawn) {
 //template<typename T>
-//void GameUtilities::CheckForPawn2(APawn* Pawn, T* Character) {
+//void CheckForPawn2(APawn* Pawn, T* Character) {
 //	if (Pawn == nullptr) {
-//		Pawn = TryGetPawnOwner();
+//		Pawn = UAnimInstance::TryGetPawnOwner();
 //		if (Pawn) {
 //			Character = Cast<T>(Pawn);
 //		}
