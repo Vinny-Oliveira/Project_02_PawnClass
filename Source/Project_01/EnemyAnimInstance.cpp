@@ -2,7 +2,22 @@
 
 
 #include "EnemyAnimInstance.h"
+#include "Enemy.h"
 
-void AEnemyAnimInstance::NativeInitializeAnimation() {
+void UEnemyAnimInstance::NativeInitializeAnimation() {
+	if (Pawn == nullptr) {
+		Pawn = TryGetPawnOwner();
+		if (Pawn) {
+			Enemy = Cast<AEnemy>(Pawn);
+		}
+	}
+}
 
+void UEnemyAnimInstance::UpdateAnimationProperties() {
+	if (Pawn == nullptr) {
+		Pawn = TryGetPawnOwner();
+		if (Pawn) {
+			Enemy = Cast<AEnemy>(Pawn);
+		}
+	}
 }
