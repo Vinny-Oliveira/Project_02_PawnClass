@@ -10,7 +10,6 @@ void UMainAnimInstance::CheckForPawn() {
 		Pawn = TryGetPawnOwner();
 		if (Pawn) {
 			Main = Cast<AMain>(Pawn);
-
 		}
 	}
 }
