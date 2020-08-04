@@ -17,6 +17,11 @@ void UEnemyAnimInstance::UpdateAnimationProperties() {
 	if (Pawn == nullptr) {
 		Pawn = TryGetPawnOwner();
 		if (Pawn) {
+			// Get the magnitude of speed on the XY plane
+			FVector Speed = Pawn->GetVelocity();
+			FVector LateralSpeed = FVector(Speed.X, Speed.Y, 0.f);
+			MovementSpeed = LateralSpeed.Size();
+
 			Enemy = Cast<AEnemy>(Pawn);
 		}
 	}
