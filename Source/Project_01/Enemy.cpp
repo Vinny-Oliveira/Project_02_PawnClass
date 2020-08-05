@@ -5,6 +5,7 @@
 #include "Components/SphereComponent.h"
 #include "AIController.h"
 #include "Main.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -78,11 +79,20 @@ void AEnemy::MoveToTarget(AMain* Target) {
 		// Use built-in functions to program the AI's movement
 		FAIMoveRequest MoveRequest;
 		MoveRequest.SetGoalActor(Target);
-		MoveRequest.SetAcceptanceRadius(5.f);
+		MoveRequest.SetAcceptanceRadius(25.f);
 
 		FNavPathSharedPtr NavPath;
 
 		AIController->MoveTo(MoveRequest, &NavPath);
+
+		/** Display the path taken by the enemy */
+		//TArray<FNavPathPoint> PathPoints{ NavPath->GetPathPoints() };
+		auto PathPoints{ NavPath->GetPathPoints() };
+
+		for (auto Point : PathPoints) {
+			FVector Location = Point.Location;
+			UKismetSystemLibrary::DrawDebugSphere(this, Location, 25.f, 12, FLinearColor::Red, 5.f, 2.f);
+		}
 	}
 }
 
