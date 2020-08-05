@@ -24,8 +24,21 @@ public:
 	// Sets default values for this character's properties
 	AEnemy();
 
+	/** Enum of the movement status */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
 	EEnemyMovementStatus EnemyMovementStatus{ EEnemyMovementStatus::EEMS_Idle };
+
+	/** For when the enemy sees and chases the player */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
+	class USphereComponent* AgroSphere{ nullptr };
+	
+	/** For when the enemy can attack the player */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
+	USphereComponent* CombatSphere{ nullptr };
+
+	/** Enemy's AI Controller */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
+	class AAIController* AIController{ nullptr };
 
 protected:
 	// Called when the game starts or when spawned
@@ -38,5 +51,45 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	/// <summary>
+	/// Set the movement status
+	/// </summary>
+	/// <param name="Status"></param>
 	FORCEINLINE void SetEnemyMovementStatus(EEnemyMovementStatus Status) { EnemyMovementStatus = Status; }
+
+	/// <summary>
+	/// Event to detect when the Agro Sphere is overlapped */
+	/// </summary>
+	UFUNCTION()
+	virtual void AgroShereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	/// <summary>
+	/// Event to detect when the Agro Sphere is no longer overlapped */
+	/// </summary>
+	UFUNCTION()
+	virtual void AgroShereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	
+	/// <summary>
+	/// Event to detect when the Combat Sphere is overlapped */
+	/// </summary>
+	UFUNCTION()
+	virtual void CombatShereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	/// <summary>
+	/// Event to detect when the Combat Sphere is no longer overlapped */
+	/// </summary>
+	UFUNCTION()
+	virtual void CombatShereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	/// <summary>
+	/// Make the enemy move to the targetted character
+	/// </summary>
+	/// <param name="Target"></param>
+	void MoveToTarget(class AMain* Target);
+
+	/// <summary>
+	/// Gets the Character that is overlapping with the enemy
+	/// </summary>
+	UFUNCTION()
+	AMain* GetValidCharacter(AActor* OtherActor);
 };
