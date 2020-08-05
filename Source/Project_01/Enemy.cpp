@@ -9,7 +9,7 @@
 
 // Sets default values
 AEnemy::AEnemy()
-{
+	: bOverlappingCombatSphere{ false } {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -71,14 +71,23 @@ void AEnemy::AgroSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AA
 
 void AEnemy::CombatSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
 	if (AMain * Main{ GetValidCharacter(OtherActor) }) {
+		bOverlappingCombatSphere = true;
 		SetEnemyMovementStatus(EEnemyMovementStatus::EEMS_Attacking);
+		CombatTarget = Main;
 	}
 }
 
 void AEnemy::CombatSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
 	if (AMain * Main{ GetValidCharacter(OtherActor) }) {
-		SetEnemyMovementStatus(EEnemyMovementStatus::EEMS_MoveToTarget);
-		MoveToTarget(Main);
+		bOverlappingCombatSphere = false;
+
+		if (EnemyMovementStatus != EEnemyMovementStatus::EEMS_Attacking) {
+			MoveToTarget(Main);
+			CombatTarget = nullptr;
+		}
+
+		//SetEnemyMovementStatus(EEnemyMovementStatus::EEMS_MoveToTarget);
+		//MoveToTarget(Main);
 	}
 }
 

@@ -40,6 +40,14 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
 	class AAIController* AIController{ nullptr };
 
+	/** Checks if the Combat Sphere is being overlapped with */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI")
+	bool bOverlappingCombatSphere{};
+
+	/** Target for the attack animation */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI")
+	AMain* CombatTarget{ nullptr };
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -85,6 +93,7 @@ public:
 	/// Make the enemy move to the targetted character
 	/// </summary>
 	/// <param name="Target"></param>
+	UFUNCTION(BlueprintCallable)
 	void MoveToTarget(class AMain* Target);
 
 	/// <summary>
