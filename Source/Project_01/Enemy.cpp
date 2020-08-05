@@ -75,7 +75,14 @@ void AEnemy::MoveToTarget(AMain* Target) {
 	SetEnemyMovementStatus(EEnemyMovementStatus::EEMS_MoveToTarget);
 
 	if (AIController) {
-		UE_LOG(LogTemp, Warning, TEXT("Move to Target"));
+		// Use built-in functions to program the AI's movement
+		FAIMoveRequest MoveRequest;
+		MoveRequest.SetGoalActor(Target);
+		MoveRequest.SetAcceptanceRadius(5.f);
+
+		FNavPathSharedPtr NavPath;
+
+		AIController->MoveTo(MoveRequest, &NavPath);
 	}
 }
 

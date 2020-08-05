@@ -29,4 +29,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = AnimationProperties)
 	void UpdateAnimationProperties();
+
+	/// <summary>
+	/// Check is the Pawn is valid and try to get it if it is not
+	/// </summary>
+	void CheckForPawn();
 };

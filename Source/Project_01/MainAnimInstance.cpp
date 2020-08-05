@@ -30,9 +30,5 @@ void UMainAnimInstance::UpdateAnimationProperties() {
 
 		// Check if the Pawn in in air
 		bIsInAir = Pawn->GetMovementComponent()->IsFalling();
-
-		if (Main == nullptr) {
-			Main = Cast<AMain>(Pawn);
-		}
 	}
 }
