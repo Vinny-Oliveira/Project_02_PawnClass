@@ -61,15 +61,25 @@ void AEnemy::AgroSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, 
 }
 
 void AEnemy::AgroSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
-
+	if (AMain * Main{ GetValidCharacter(OtherActor) }) {
+		SetEnemyMovementStatus(EEnemyMovementStatus::EEMS_Idle);
+		if (AIController) {
+			AIController->StopMovement();
+		}
+	}
 }
 
 void AEnemy::CombatSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
-
+	if (AMain * Main{ GetValidCharacter(OtherActor) }) {
+		SetEnemyMovementStatus(EEnemyMovementStatus::EEMS_Attacking);
+	}
 }
 
 void AEnemy::CombatSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
-
+	if (AMain * Main{ GetValidCharacter(OtherActor) }) {
+		SetEnemyMovementStatus(EEnemyMovementStatus::EEMS_MoveToTarget);
+		MoveToTarget(Main);
+	}
 }
 
 void AEnemy::MoveToTarget(AMain* Target) {
@@ -79,7 +89,7 @@ void AEnemy::MoveToTarget(AMain* Target) {
 		// Use built-in functions to program the AI's movement
 		FAIMoveRequest MoveRequest;
 		MoveRequest.SetGoalActor(Target);
-		MoveRequest.SetAcceptanceRadius(25.f);
+		MoveRequest.SetAcceptanceRadius(10.f);
 
 		FNavPathSharedPtr NavPath;
 
