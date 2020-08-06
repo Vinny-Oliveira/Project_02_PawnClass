@@ -9,7 +9,10 @@
 
 // Sets default values
 AEnemy::AEnemy()
-	: bOverlappingCombatSphere{ false } {
+	: bOverlappingCombatSphere{ false },
+	Health{ 75.f },
+	MaxHealth{ 100.f },
+	Damage{ 10.f } {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 

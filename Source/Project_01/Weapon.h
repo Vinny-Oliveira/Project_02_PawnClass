@@ -45,6 +45,13 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item | Combat")
 	class UBoxComponent* CombatCollision{ nullptr };
 
+	/** Damage the weapon deals */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Combat")
+	float Damage{};
+
+protected:
+	virtual void BeginPlay() override;
+
 public:
 
 	/// <summary>
@@ -59,11 +66,25 @@ public:
 	/// <param name="State"></param>
 	FORCEINLINE void SetWeaponState(EWeaponState State) { WeaponState = State; }
 
-	/** Event to detect when the switch is stepped on */
+	/// <summary>
+	/// Event to detect when the outer sphere collider is overlapped with
+	/// </summary>
 	virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
 
-	/** Event to detect when the switch is no longer stepped on */
+	/// <summary>
+	/// Event to detect when the outer sphere collider is no longer overlapped with
+	/// </summary>
 	virtual void OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) override;
+	
+	/// <summary>
+	/// Detect when the combat box is overlapped
+	/// </summary>
+	void CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	/// <summary>
+	/// Detect when the combat box is no longer overlapped
+	/// </summary>
+	void CombatOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	/// <summary>
 	/// Equip the weapon to a Character' socket

@@ -48,6 +48,22 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI")
 	AMain* CombatTarget{ nullptr };
 
+	/** Enemy's health */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+	float Health{};
+
+	/** Enemy's Maximum Health */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+	float MaxHealth{};
+
+	/** The damage the enemy deals */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+	float Damage{};
+
+	/** Particles emitted by the enmy when it is hit */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+	class UParticleSystem* HitParticles{ nullptr };
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
