@@ -79,11 +79,13 @@ public:
 	/// <summary>
 	/// Detect when the combat box is overlapped
 	/// </summary>
+	UFUNCTION()
 	void CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	/// <summary>
 	/// Detect when the combat box is no longer overlapped
 	/// </summary>
+	UFUNCTION()
 	void CombatOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	/// <summary>

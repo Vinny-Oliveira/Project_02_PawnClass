@@ -95,7 +95,7 @@ void AEnemy::CombatSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, 
 }
 
 void AEnemy::MoveToTarget(AMain* Target) {
-	UE_LOG(LogTemp, Warning, TEXT("MoveToTarget Called"));
+	//UE_LOG(LogTemp, Warning, TEXT("MoveToTarget Called"));
 	SetEnemyMovementStatus(EEnemyMovementStatus::EEMS_MoveToTarget);
 
 	if (AIController) {

@@ -64,8 +64,16 @@ public:
 	virtual void OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	/// <summary>
-	/// Gets the Character the item is overlapping with
+	/// Gets the Main Character the item is overlapping with
 	/// </summary>
 	UFUNCTION()
 	class AMain* GetValidCharacter(AActor* OtherActor);
+	
+	/// <summary>
+	/// Gets the Enemy the item is overlapping with
+	/// </summary>
+	class AEnemy* GetValidEnemy(AActor* OtherActor);
+
+	//template<typename T>
+	//T* GetTest(T& t);
 };

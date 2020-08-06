@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
 #include "Main.h"
+#include "Enemy.h"
 
 // Sets default values
 AItem::AItem()
@@ -47,7 +48,7 @@ void AItem::Tick(float DeltaTime)
 }
 
 void AItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
-	UE_LOG(LogTemp, Warning, TEXT("OnOverlapBegin Called"));
+	//UE_LOG(LogTemp, Warning, TEXT("OnOverlapBegin Called"));
 
 	// Emit particles
 	if (OverlapParticles) {
@@ -62,7 +63,7 @@ void AItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 }
 
 void AItem::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
-	UE_LOG(LogTemp, Warning, TEXT("OnOverlapEnd Called"));
+	//UE_LOG(LogTemp, Warning, TEXT("OnOverlapEnd Called"));
 }
 
 AMain* AItem::GetValidCharacter(AActor* OtherActor) {
@@ -75,3 +76,20 @@ AMain* AItem::GetValidCharacter(AActor* OtherActor) {
 
 	return nullptr;
 }
+
+AEnemy* AItem::GetValidEnemy(AActor* OtherActor) {
+	if (OtherActor) {
+		AEnemy* Enemy{ Cast<AEnemy>(OtherActor) };
+		if (Enemy) {
+			return Enemy;
+		}
+	}
+
+	return nullptr;
+}
+
+//template<typename T>
+//T* AItem::GetTest(T& t) {
+//	T* p{ &t };
+//	return p;
+//}
