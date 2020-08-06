@@ -78,7 +78,11 @@ void AWeapon::CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AAc
 
 	if (AEnemy* Enemy{ GetValidEnemy(OtherActor) }) {
 		if (Enemy->HitParticles) {
-			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Enemy->HitParticles, GetActorLocation(), FRotator(0.f), false);
+			const USkeletalMeshSocket* WeaponSocket{ SkeletalMesh->GetSocketByName("WeaponSocket") };
+			if (WeaponSocket) {
+				FVector SocketLocation{ WeaponSocket->GetSocketLocation(SkeletalMesh) };
+				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Enemy->HitParticles, SocketLocation, FRotator(0.f), false);
+			}
 		}
 	}
 }
