@@ -41,6 +41,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Particles")
 	bool bCanEmitParticles{};
 
+	/** Box collider used for combat */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item | Combat")
+	class UBoxComponent* CombatCollision{ nullptr };
+
 public:
 
 	/// <summary>
