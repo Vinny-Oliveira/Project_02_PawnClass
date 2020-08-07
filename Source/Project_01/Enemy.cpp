@@ -6,6 +6,7 @@
 #include "AIController.h"
 #include "Main.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Components/BoxComponent.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -23,6 +24,9 @@ AEnemy::AEnemy()
 	CombatSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CombatSphere"));
 	CombatSphere->SetupAttachment(GetRootComponent());
 	CombatSphere->InitSphereRadius(75.f);
+
+	CombatCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("CombatCollision"));
+	CombatCollision->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("EnemySocket"));
 }
 
 // Called when the game starts or when spawned

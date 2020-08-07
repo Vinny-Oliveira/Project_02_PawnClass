@@ -67,6 +67,14 @@ public:
 	/** Sound played when the enemy is struck by a weapon */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
 	class USoundCue* StruckSound{ nullptr };
+	
+	/** Sound played when the enemy swings its claw */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+	USoundCue* SwingSound{ nullptr };
+
+	/** Box collider used for combat */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Combat")
+	class UBoxComponent* CombatCollision{ nullptr };
 
 protected:
 	// Called when the game starts or when spawned
