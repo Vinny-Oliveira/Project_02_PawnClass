@@ -9,6 +9,8 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Weapon.h"
 #include "Animation/AnimMontage.h"
+#include "Sound/SoundCue.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AMain::AMain()
@@ -302,6 +304,10 @@ void AMain::Attack() {
 
 			AnimInstance->Montage_Play(CombatMontage, 2.f);
 			AnimInstance->Montage_JumpToSection(AnimName, CombatMontage);
+		}
+
+		if (EquippedWeapon->SwingSound) {
+			UGameplayStatics::PlaySound2D(this, EquippedWeapon->SwingSound);
 		}
 	}
 }

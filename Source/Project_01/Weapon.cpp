@@ -25,6 +25,12 @@ void AWeapon::BeginPlay() {
 
 	CombatCollision->OnComponentBeginOverlap.AddDynamic(this, &AWeapon::CombatOnOverlapBegin);
 	CombatCollision->OnComponentEndOverlap.AddDynamic(this, &AWeapon::CombatOnOverlapEnd);
+
+	// Have the combat collision detect overlap collision with Pawns
+	CombatCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	CombatCollision->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
+	CombatCollision->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	CombatCollision->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 }
 
 void AWeapon::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
@@ -74,19 +80,31 @@ void AWeapon::Equip(AMain* Character) {
 }
 
 void AWeapon::CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
-	UE_LOG(LogTemp, Warning, TEXT("Enemy Hit"));
-
 	if (AEnemy* Enemy{ GetValidEnemy(OtherActor) }) {
 		if (Enemy->HitParticles) {
+
+			// Spawn the particles at the Weapon Socket, a location by the blade
 			const USkeletalMeshSocket* WeaponSocket{ SkeletalMesh->GetSocketByName("WeaponSocket") };
 			if (WeaponSocket) {
 				FVector SocketLocation{ WeaponSocket->GetSocketLocation(SkeletalMesh) };
 				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Enemy->HitParticles, SocketLocation, FRotator(0.f), false);
 			}
 		}
+
+		if (Enemy->StruckSound) {
+			UGameplayStatics::PlaySound2D(this, Enemy->StruckSound);
+		}
 	}
 }
 
 void AWeapon::CombatOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
 
+}
+
+void AWeapon::ActivateCollision() {
+	CombatCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+}
+
+void AWeapon::DeactivateCollision() {
+	CombatCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }

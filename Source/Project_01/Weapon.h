@@ -49,6 +49,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Combat")
 	float Damage{};
 
+	/** Sound played when the weapon is swung */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Sound")
+	USoundCue* SwingSound{ nullptr };
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -93,4 +97,17 @@ public:
 	/// </summary>
 	/// <param name="Character"></param>
 	void Equip(class AMain* Character);
+
+	/// <summary>
+	/// Allow the weapon to deal damage
+	/// </summary>
+	UFUNCTION(BlueprintCallable)
+	void ActivateCollision();
+	
+	/// <summary>
+	/// Do not allow the weapon to deal damage anymore
+	/// </summary>
+	UFUNCTION(BlueprintCallable)
+	void DeactivateCollision();
+
 };
