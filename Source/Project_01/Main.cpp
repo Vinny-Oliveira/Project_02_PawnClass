@@ -11,6 +11,7 @@
 #include "Animation/AnimMontage.h"
 #include "Sound/SoundCue.h"
 #include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystem.h"
 
 // Sets default values
 AMain::AMain()

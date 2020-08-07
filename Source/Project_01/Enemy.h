@@ -60,7 +60,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
 	float Damage{};
 
-	/** Particles emitted by the enmy when it is hit */
+	/** Particles emitted by the enemy when it is hit */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
 	class UParticleSystem* HitParticles{ nullptr };
 
@@ -129,4 +129,28 @@ public:
 	/// </summary>
 	UFUNCTION()
 	AMain* GetValidCharacter(AActor* OtherActor);
+
+	/// <summary>
+	/// Detect when the combat box is overlapped
+	/// </summary>
+	UFUNCTION()
+	void CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	/// <summary>
+	/// Detect when the combat box is no longer overlapped
+	/// </summary>
+	UFUNCTION()
+	void CombatOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	/// <summary>
+	/// Allow the enemy to deal damage
+	/// </summary>
+	UFUNCTION(BlueprintCallable)
+	void ActivateCollision();
+
+	/// <summary>
+	/// Do not allow the enemy to deal damage anymore
+	/// </summary>
+	UFUNCTION(BlueprintCallable)
+	void DeactivateCollision();
 };

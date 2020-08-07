@@ -98,6 +98,14 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Anims")
 	class UAnimMontage* CombatMontage{ nullptr };
 
+	/** Particles emitted by the character when it is hit */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	class UParticleSystem* HitParticles{ nullptr };
+
+	/** Sound played when the character is struck by an enemy */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	class USoundCue* StruckSound{ nullptr };
+
 	/**
 	/* Player Stats
 	*/

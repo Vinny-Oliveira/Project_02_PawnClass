@@ -7,6 +7,9 @@
 #include "Main.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Components/BoxComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Engine/SkeletalMeshSocket.h"
+#include "Sound/SoundCue.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -44,6 +47,12 @@ void AEnemy::BeginPlay()
 	// Bind the overlapping actions
 	CombatSphere->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::CombatSphereOnOverlapBegin);
 	CombatSphere->OnComponentEndOverlap.AddDynamic(this, &AEnemy::CombatSphereOnOverlapEnd);
+
+	// Have the combat collision detect overlap collision with Pawns
+	CombatCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	CombatCollision->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
+	CombatCollision->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	CombatCollision->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 
 }
 
@@ -132,4 +141,34 @@ AMain* AEnemy::GetValidCharacter(AActor* OtherActor) {
 	}
 
 	return nullptr;
+}
+
+void AEnemy::CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
+	if (AMain* Main{ GetValidCharacter(OtherActor) }) {
+		if (Main->HitParticles) {
+
+			// Spawn the particles at the Weapon Socket, a location by the blade
+			const USkeletalMeshSocket* TipSocket{ GetMesh()->GetSocketByName("TipSocket") };
+			if (TipSocket) {
+				FVector SocketLocation{ TipSocket->GetSocketLocation(GetMesh()) };
+				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Main->HitParticles, SocketLocation, FRotator(0.f), false);
+			}
+		}
+
+		if (Main->StruckSound) {
+			UGameplayStatics::PlaySound2D(this, Main->StruckSound);
+		}
+	}
+}
+
+void AEnemy::CombatOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
+
+}
+
+void AEnemy::ActivateCollision() {
+	CombatCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+}
+
+void AEnemy::DeactivateCollision() {
+	CombatCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
