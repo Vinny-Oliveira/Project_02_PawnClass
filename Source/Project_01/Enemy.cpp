@@ -10,13 +10,15 @@
 #include "Kismet/GameplayStatics.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "Sound/SoundCue.h"
+#include "Animation/AnimMontage.h"
 
 // Sets default values
 AEnemy::AEnemy()
 	: bOverlappingCombatSphere{ false },
 	Health{ 75.f },
 	MaxHealth{ 100.f },
-	Damage{ 10.f } {
+	Damage{ 10.f },
+	bAttacking{ false } {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -47,6 +49,10 @@ void AEnemy::BeginPlay()
 	// Bind the overlapping actions
 	CombatSphere->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::CombatSphereOnOverlapBegin);
 	CombatSphere->OnComponentEndOverlap.AddDynamic(this, &AEnemy::CombatSphereOnOverlapEnd);
+	
+	// Bind the overlapping actions
+	CombatCollision->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::CombatOnOverlapBegin);
+	CombatCollision->OnComponentEndOverlap.AddDynamic(this, &AEnemy::CombatOnOverlapEnd);
 
 	// Have the combat collision detect overlap collision with Pawns
 	CombatCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -86,24 +92,22 @@ void AEnemy::AgroSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AA
 }
 
 void AEnemy::CombatSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
-	if (AMain * Main{ GetValidCharacter(OtherActor) }) {
+	if (AMain* Main{ GetValidCharacter(OtherActor) }) {
 		bOverlappingCombatSphere = true;
 		SetEnemyMovementStatus(EEnemyMovementStatus::EEMS_Attacking);
 		CombatTarget = Main;
+		Attack();
 	}
 }
 
 void AEnemy::CombatSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
-	if (AMain * Main{ GetValidCharacter(OtherActor) }) {
+	if (AMain* Main{ GetValidCharacter(OtherActor) }) {
 		bOverlappingCombatSphere = false;
 
 		if (EnemyMovementStatus != EEnemyMovementStatus::EEMS_Attacking) {
 			MoveToTarget(Main);
 			CombatTarget = nullptr;
 		}
-
-		//SetEnemyMovementStatus(EEnemyMovementStatus::EEMS_MoveToTarget);
-		//MoveToTarget(Main);
 	}
 }
 
@@ -167,8 +171,39 @@ void AEnemy::CombatOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor
 
 void AEnemy::ActivateCollision() {
 	CombatCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+
+	if (SwingSound) {
+		UGameplayStatics::PlaySound2D(this, SwingSound);
+	}
 }
 
 void AEnemy::DeactivateCollision() {
 	CombatCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+
+void AEnemy::Attack() {
+	if (AIController) {
+		AIController->StopMovement();
+		SetEnemyMovementStatus(EEnemyMovementStatus::EEMS_Attacking);
+	}
+
+	if (!bAttacking) {
+		bAttacking = true;
+
+		// Play attack animation
+		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+		if (AnimInstance && CombatMontage) {
+			AnimInstance->Montage_Play(CombatMontage, 1.35f);
+			AnimInstance->Montage_JumpToSection(FName("Attack"), CombatMontage);
+		}
+	}
+}
+
+void AEnemy::AttackEnd() {
+	bAttacking = false;
+
+	// Attack again if still next to the character
+	if (bOverlappingCombatSphere) {
+		Attack();
+	}
 }

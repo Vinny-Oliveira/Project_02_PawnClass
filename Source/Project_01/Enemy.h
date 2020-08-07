@@ -76,6 +76,14 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Combat")
 	class UBoxComponent* CombatCollision{ nullptr };
 
+	/** Enemy's combat montage */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	class UAnimMontage* CombatMontage{ nullptr };
+
+	/** Check if the enemy is attacking */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
+	bool bAttacking{};
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -153,4 +161,15 @@ public:
 	/// </summary>
 	UFUNCTION(BlueprintCallable)
 	void DeactivateCollision();
+
+	/// <summary>
+	/// Play attack animations and deal damage
+	/// </summary>
+	void Attack();
+
+	/// <summary>
+	/// Trigger this function when the attack animation finishes
+	/// </summary>
+	UFUNCTION(BlueprintCallable)
+	void AttackEnd();
 };
