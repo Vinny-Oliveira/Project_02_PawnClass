@@ -7,11 +7,13 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Weapon.h"
 #include "Animation/AnimMontage.h"
 #include "Sound/SoundCue.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystem.h"
+#include "Enemy.h"
 
 // Sets default values
 AMain::AMain()
@@ -30,7 +32,9 @@ AMain::AMain()
 	MovementStatus{ EMovementStatus::EMS_Normal },
 	StaminaStatus{ EStaminaStatus::ESS_Normal },
 	StaminaDrainRate{ 25.f },
-	MinSprintStamina{ 50.f } {
+	MinSprintStamina{ 50.f },
+	InterpSpeed{ 15.f },
+	bInterpingToEnemy{ false } {
 
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -75,6 +79,8 @@ void AMain::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	HandleStaminaStatus(DeltaTime);
+
+	InterpToEnemy(DeltaTime);
 }
 
 // Called to bind functionality to input
@@ -281,6 +287,7 @@ void AMain::SetEquippedWeapon(AWeapon* WeaponToSet) {
 void AMain::Attack() {
 	if (!bIsAttacking) { // Do not attack if an attack animation is playing
 		bIsAttacking = true;
+		SetInterpingToEnemy(true);
 
 		// Play attack animation
 		UAnimInstance* AnimInstance{ GetMesh()->GetAnimInstance() };
@@ -311,6 +318,7 @@ void AMain::Attack() {
 
 void AMain::AttackEnd() {
 	bIsAttacking = false;
+	SetInterpingToEnemy(false);
 	if (bLeftMouseBtnDown) {
 		Attack(); // Attack again if the button is held down
 	}
@@ -319,5 +327,24 @@ void AMain::AttackEnd() {
 void AMain::PlaySwingSound() {
 	if (EquippedWeapon->SwingSound) {
 		UGameplayStatics::PlaySound2D(this, EquippedWeapon->SwingSound);
+	}
+}
+
+FRotator AMain::GetLookAtRotationYaw(FVector TargetLocation) {
+	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetLocation);
+	FRotator LookAtRotationYaw(0.f, LookAtRotation.Yaw, 0.f);
+	return LookAtRotationYaw;
+}
+
+FRotator AMain::GetLookAtRotationYaw(AActor* Target) {
+	return GetLookAtRotationYaw(Target->GetActorLocation());
+}
+
+void AMain::InterpToEnemy(float DeltaTime) {
+	if (bInterpingToEnemy && CombatTarget) {
+		FRotator LookAtYaw = GetLookAtRotationYaw(CombatTarget);
+		FRotator InterpRotation = FMath::RInterpTo(GetActorRotation(), LookAtYaw, DeltaTime, InterpSpeed);
+
+		SetActorRotation(InterpRotation);
 	}
 }

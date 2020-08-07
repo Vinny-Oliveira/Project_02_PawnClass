@@ -106,6 +106,16 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	class USoundCue* StruckSound{ nullptr };
 
+	/** Enemy the character is fighting with */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
+	class AEnemy* CombatTarget{ nullptr };
+
+	/** Speed to interpolate the character's rotation towards the enemy */
+	float InterpSpeed{};
+
+	/** Check if the character is interpolationg towards the enemy */
+	bool bInterpingToEnemy{};
+
 	/**
 	/* Player Stats
 	*/
@@ -271,4 +281,30 @@ public:
 	/// </summary>
 	UFUNCTION(BlueprintCallable)
 	void PlaySwingSound();
+
+	/// <summary>
+	/// Set whether or not the Character is interping to the enemy
+	/// </summary>
+	/// <param name="IsInterping"></param>
+	FORCEINLINE void SetInterpingToEnemy(bool IsInterping) { bInterpingToEnemy = IsInterping; }
+
+	/// <summary>
+	/// Set the CombatTarget
+	/// </summary>
+	/// <param name="Target"></param>
+	FORCEINLINE void SetCombatTarget(AEnemy* Target) { CombatTarget = Target; }
+
+	/// <summary>
+	/// Return the yaw rotation needed for the character to face the target
+	/// </summary>
+	/// <param name="Target"></param>
+	/// <returns></returns>
+	FRotator GetLookAtRotationYaw(FVector Target);
+	FRotator GetLookAtRotationYaw(AActor* Target);
+
+	/// <summary>
+	/// Rotate the enemy towards the target using interpolation
+	/// </summary>
+	/// <param name="DeltaTime"></param>
+	void InterpToEnemy(float DeltaTime);
 };

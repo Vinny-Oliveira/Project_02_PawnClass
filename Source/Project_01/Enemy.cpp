@@ -96,6 +96,7 @@ void AEnemy::CombatSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent
 		bOverlappingCombatSphere = true;
 		SetEnemyMovementStatus(EEnemyMovementStatus::EEMS_Attacking);
 		CombatTarget = Main;
+		Main->SetCombatTarget(this);
 		Attack();
 	}
 }
@@ -107,6 +108,7 @@ void AEnemy::CombatSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, 
 		if (EnemyMovementStatus != EEnemyMovementStatus::EEMS_Attacking) {
 			MoveToTarget(Main);
 			CombatTarget = nullptr;
+			Main->SetCombatTarget(nullptr);
 		}
 	}
 }
