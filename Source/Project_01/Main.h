@@ -257,4 +257,10 @@ public:
 	/// </summary>
 	UFUNCTION(BlueprintCallable)
 	void AttackEnd();
+
+	/// <summary>
+	/// Play the equipped weapon's swing sound
+	/// </summary>
+	UFUNCTION(BlueprintCallable)
+	void PlaySwingSound();
 };

@@ -305,10 +305,6 @@ void AMain::Attack() {
 			AnimInstance->Montage_Play(CombatMontage, 2.f);
 			AnimInstance->Montage_JumpToSection(AnimName, CombatMontage);
 		}
-
-		if (EquippedWeapon->SwingSound) {
-			UGameplayStatics::PlaySound2D(this, EquippedWeapon->SwingSound);
-		}
 	}
 }
 
@@ -316,5 +312,11 @@ void AMain::AttackEnd() {
 	bIsAttacking = false;
 	if (bLeftMouseBtnDown) {
 		Attack(); // Attack again if the button is held down
+	}
+}
+
+void AMain::PlaySwingSound() {
+	if (EquippedWeapon->SwingSound) {
+		UGameplayStatics::PlaySound2D(this, EquippedWeapon->SwingSound);
 	}
 }
