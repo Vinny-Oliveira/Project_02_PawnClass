@@ -84,6 +84,18 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
 	bool bAttacking{};
 
+	/**
+	/* Handlers of the enemy's attack delay
+	*/
+
+	FTimerHandle AttackTimer{};
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+ 	float MinAttackTime{};
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	float MaxAttackTime{};
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

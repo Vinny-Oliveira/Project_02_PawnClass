@@ -18,7 +18,9 @@ AEnemy::AEnemy()
 	Health{ 75.f },
 	MaxHealth{ 100.f },
 	Damage{ 10.f },
-	bAttacking{ false } {
+	bAttacking{ false },
+	MinAttackTime{ 0.5f },
+	MaxAttackTime{ 3.5f } {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -104,6 +106,9 @@ void AEnemy::CombatSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent
 void AEnemy::CombatSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
 	if (AMain* Main{ GetValidCharacter(OtherActor) }) {
 		bOverlappingCombatSphere = false;
+
+		// Clear the timer of the attack
+		GetWorldTimerManager().ClearTimer(AttackTimer);
 
 		if (EnemyMovementStatus != EEnemyMovementStatus::EEMS_Attacking) {
 			MoveToTarget(Main);
@@ -206,6 +211,7 @@ void AEnemy::AttackEnd() {
 
 	// Attack again if still next to the character
 	if (bOverlappingCombatSphere) {
-		Attack();
+		float AttackTime = FMath::FRandRange(MinAttackTime, MaxAttackTime);
+		GetWorldTimerManager().SetTimer(AttackTimer, this, &AEnemy::Attack, AttackTime);
 	}
 }
