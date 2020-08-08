@@ -269,6 +269,7 @@ void AEnemy::Die() {
 }
 
 void AEnemy::DeathEnd() {
-	GetMesh()->bPauseAnims = true;
-	GetMesh()->bNoSkeletonUpdate = true;
+	UE_LOG(LogTemp, Warning, TEXT("Enemy Dead"));
+	//GetMesh()->bPauseAnims = true;
+	//GetMesh()->bNoSkeletonUpdate = true;
 }
