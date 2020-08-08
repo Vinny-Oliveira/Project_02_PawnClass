@@ -177,6 +177,10 @@ AMain* AEnemy::GetValidCharacter(AActor* OtherActor) {
 }
 
 void AEnemy::CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
+	if (!IsAlive()) {
+		return;
+	}
+	
 	if (AMain* Main{ GetValidCharacter(OtherActor) }) {
 		// Particles
 		if (Main->HitParticles) {
@@ -202,7 +206,9 @@ void AEnemy::CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AAct
 }
 
 void AEnemy::CombatOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
-
+	if (!IsAlive()) {
+		return;
+	}
 }
 
 void AEnemy::ActivateCollision() {
@@ -260,7 +266,7 @@ float AEnemy::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEv
 }
 
 void AEnemy::Die() {
-	UE_LOG(LogTemp, Warning, TEXT("Enemy Dead"));
+	//UE_LOG(LogTemp, Warning, TEXT("Enemy Dead"));
 	UAnimInstance* AnimInstance{ GetMesh()->GetAnimInstance() };
 	// Play death animation
 	if (AnimInstance && CombatMontage) {
@@ -277,8 +283,8 @@ void AEnemy::Die() {
 	//GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
-//void AEnemy::DeathEnd() {
-//	//UE_LOG(LogTemp, Warning, TEXT("Enemy Dead"));
-//	//GetMesh()->bPauseAnims = true;
-//	//GetMesh()->bNoSkeletonUpdate = true;
-//}
+void AEnemy::DeathEnd() {
+	UE_LOG(LogTemp, Warning, TEXT("Enemy Dead"));
+	GetMesh()->bPauseAnims = true;
+	GetMesh()->bNoSkeletonUpdate = true;
+}

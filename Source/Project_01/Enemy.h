@@ -203,11 +203,11 @@ public:
 	/// </summary>
 	void Die();
 
-	///// <summary>
-	///// Trigger the death events after the death animation is played
-	///// </summary>
-	//UFUNCTION(BlueprintCallable)
-	//void DeathEnd();
+	/// <summary>
+	/// Trigger the death events after the death animation is played
+	/// </summary>
+	UFUNCTION(BlueprintCallable)
+	void DeathEnd();
 
 	/// <summary>
 	/// Returns whether the Enemy is alive or not
