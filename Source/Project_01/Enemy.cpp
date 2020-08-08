@@ -22,7 +22,8 @@ AEnemy::AEnemy()
 	bAttacking{ false },
 	MinAttackTime{ 0.5f },
 	MaxAttackTime{ 1.2f },
-	EnemyMovementStatus{ EEnemyMovementStatus::EEMS_Idle } {
+	EnemyMovementStatus{ EEnemyMovementStatus::EEMS_Idle },
+	DestroyDelay{ 3.f } {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -284,7 +285,17 @@ void AEnemy::Die() {
 }
 
 void AEnemy::DeathEnd() {
-	UE_LOG(LogTemp, Warning, TEXT("Enemy Dead"));
+	//UE_LOG(LogTemp, Warning, TEXT("Enemy Dead"));
+
+	// Freeze position and animation
 	GetMesh()->bPauseAnims = true;
 	GetMesh()->bNoSkeletonUpdate = true;
+
+	// Destroy the enemy in the world
+	GetWorldTimerManager().SetTimer(DestroyTimer, this, &AEnemy::Disappear, DestroyDelay);
+}
+
+void AEnemy::Disappear() {
+	UE_LOG(LogTemp, Warning, TEXT("Disappear"));
+	Destroy();
 }

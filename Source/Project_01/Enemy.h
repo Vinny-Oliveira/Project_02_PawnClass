@@ -102,6 +102,17 @@ public:
 	float MaxAttackTime{};
 
 #pragma endregion
+	
+
+#pragma region DESTROY_DELAY
+	/** Handlers of the enemy's delay to be destroyed after death */
+
+	FTimerHandle DestroyTimer{};
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	float DestroyDelay{};
+
+#pragma endregion
 
 
 protected:
@@ -214,4 +225,9 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	FORCEINLINE bool IsAlive() { return (EnemyMovementStatus != EEnemyMovementStatus::EEMS_Dead); }
+
+	/// <summary>
+	/// Destroy the enemy after death
+	/// </summary>
+	void Disappear();
 };
