@@ -87,9 +87,3 @@ AEnemy* AItem::GetValidEnemy(AActor* OtherActor) {
 
 	return nullptr;
 }
-
-//template<typename T>
-//T* AItem::GetTest(T& t) {
-//	T* p{ &t };
-//	return p;
-//}

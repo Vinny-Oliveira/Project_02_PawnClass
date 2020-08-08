@@ -113,9 +113,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Controller")
 	class AMainPlayerController* MainPlayerController{ nullptr };
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Combat")
-	FVector CombatTargetLocation{};
-
 #pragma endregion
 
 
@@ -348,4 +345,9 @@ public:
 	/// </summary>
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE bool HasCombatTarget() { return (CombatTarget != nullptr); }
+
+	/// <summary>
+	/// Handle how the enemy health bar is displayed
+	/// </summary>
+	void HandleEnemyHealthBar();
 };

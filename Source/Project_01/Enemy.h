@@ -212,7 +212,7 @@ public:
 	/// <summary>
 	/// Play death animation and deactivate enemy collision
 	/// </summary>
-	void Die();
+	void Die(AActor* DamageCauser);
 
 	/// <summary>
 	/// Trigger the death events after the death animation is played

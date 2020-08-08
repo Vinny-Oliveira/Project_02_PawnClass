@@ -54,6 +54,7 @@ void AWeapon::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 
 void AWeapon::Equip(AMain* Character) {
 	if (Character) {
+		Wielder = Character;
 		SetInstigator(Character->GetController());
 
 		SkeletalMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore); // Camera does not zoom in if the sword is in the way

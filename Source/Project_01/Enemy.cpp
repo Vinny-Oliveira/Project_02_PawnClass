@@ -13,6 +13,7 @@
 #include "Animation/AnimMontage.h"
 #include "Components/CapsuleComponent.h"
 #include "MainPlayerController.h"
+#include "Weapon.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -97,7 +98,7 @@ void AEnemy::AgroSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AA
 		return;
 	}
 	
-	if (AMain * Main{ GetValidCharacter(OtherActor) }) {
+	if (AMain* Main{ GetValidCharacter(OtherActor) }) {
 		// Hide health bar
 		// Display Enemy health bar
 		if (Main->MainPlayerController) {
@@ -275,14 +276,13 @@ float AEnemy::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEv
 	Health -= DamageAmount;
 	if (Health <= 0.f) {
 		Health = 0.f;
-		Die();
+		Die(DamageCauser);
 	}
 
 	return DamageAmount;
 }
 
-void AEnemy::Die() {
-	//UE_LOG(LogTemp, Warning, TEXT("Enemy Dead"));
+void AEnemy::Die(AActor* DamageCauser) {
 	UAnimInstance* AnimInstance{ GetMesh()->GetAnimInstance() };
 	// Play death animation
 	if (AnimInstance && CombatMontage) {
@@ -291,6 +291,17 @@ void AEnemy::Die() {
 	}
 
 	SetEnemyMovementStatus(EEnemyMovementStatus::EEMS_Dead);
+
+	// Hide the health bar
+	if (DamageCauser) {
+		AWeapon* Weapon = Cast<AWeapon>(DamageCauser);
+		if (Weapon) {
+			AMain* Main = Weapon->Wielder;
+			if (Main->CombatTarget == this) {
+				Main->MainPlayerController->HideEnemyHealthBar();
+			}
+		}
+	}
 
 	// Deactivate enemy collision
 	CombatCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);

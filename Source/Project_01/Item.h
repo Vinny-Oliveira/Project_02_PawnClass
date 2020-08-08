@@ -74,6 +74,4 @@ public:
 	/// </summary>
 	class AEnemy* GetValidEnemy(AActor* OtherActor);
 
-	//template<typename T>
-	//T* GetTest(T& t);
 };

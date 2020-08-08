@@ -25,40 +25,59 @@ class PROJECT_01_API AWeapon : public AItem
 public:
 	AWeapon();
 
-	/** Enum for the state of the weapon */
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enums")
-	EWeaponState WeaponState{ EWeaponState::EWS_Pickup };
-
+#pragma region PHYSICS_COMPONENTS
 	/** Skeletal mesh of the weapon */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "SkeletalMesh")
 	class USkeletalMeshComponent* SkeletalMesh{ nullptr };
-
-	/** Sound played when the weapon is equipped */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Sound")
-	class USoundCue* OnEquipSound{ nullptr };
-
-	/** Boolean to set if the weapon can emit particles or not */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Particles")
-	bool bCanEmitParticles{};
 
 	/** Box collider used for combat */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item | Combat")
 	class UBoxComponent* CombatCollision{ nullptr };
 
-	/** Damage the weapon deals */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Combat")
-	float Damage{};
+#pragma endregion
+
+
+#pragma region SOUNDS
+	/** Sound played when the weapon is equipped */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Sound")
+	class USoundCue* OnEquipSound{ nullptr };
 
 	/** Sound played when the weapon is swung */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Sound")
 	USoundCue* SwingSound{ nullptr };
 
+#pragma endregion
+
+
+#pragma region DAMAGE
+	/** Damage the weapon deals */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Combat")
+	float Damage{};
+
 	/** Damage type class */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Combat")
 	TSubclassOf<UDamageType> DamageTypeClass{};
 
+#pragma endregion
+
+
+#pragma region WEAPON_WIELDER
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item | Combat")
 	AController* WeaponInstigator{ nullptr };
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item | Combat")
+	class AMain* Wielder{ nullptr };
+
+#pragma endregion
+
+
+	/** Enum for the state of the weapon */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enums")
+	EWeaponState WeaponState{ EWeaponState::EWS_Pickup };
+
+	/** Boolean to set if the weapon can emit particles or not */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Particles")
+	bool bCanEmitParticles{};
 
 protected:
 	virtual void BeginPlay() override;
