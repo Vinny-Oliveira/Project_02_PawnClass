@@ -12,6 +12,7 @@
 #include "Sound/SoundCue.h"
 #include "Animation/AnimMontage.h"
 #include "Components/CapsuleComponent.h"
+#include "MainPlayerController.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -110,10 +111,17 @@ void AEnemy::CombatSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent
 	}
 	
 	if (AMain* Main{ GetValidCharacter(OtherActor) }) {
+		// Prepare attack state
 		bOverlappingCombatSphere = true;
 		SetEnemyMovementStatus(EEnemyMovementStatus::EEMS_Attacking);
 		CombatTarget = Main;
 		Main->SetCombatTarget(this);
+		
+		// Display Enemy health bar
+		if (Main->MainPlayerController) {
+			Main->MainPlayerController->DisplayEnemyHealthBar();
+		}
+		
 		Attack();
 	}
 }

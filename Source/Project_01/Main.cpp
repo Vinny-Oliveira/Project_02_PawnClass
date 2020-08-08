@@ -14,6 +14,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystem.h"
 #include "Enemy.h"
+#include "MainPlayerController.h"
 
 // Sets default values
 AMain::AMain()
@@ -71,6 +72,7 @@ void AMain::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	MainPlayerController = Cast<AMainPlayerController>(GetController());
 }
 
 // Called every frame
@@ -360,6 +362,3 @@ float AMain::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEve
 	return DamageAmount;
 }
 
-//bool AMain::HasCombatTarget() { 
-//	return (CombatTarget != nullptr); 
-//}

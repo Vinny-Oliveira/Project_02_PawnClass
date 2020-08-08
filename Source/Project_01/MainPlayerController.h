@@ -20,11 +20,28 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
 	TSubclassOf<class UUserWidget> HUDOverlayAsset;
 
-	/** Variable to hold the widget after creating it */
+	/** Variable to hold the HEUDOverlay widget after creating it */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
 	UUserWidget* HUDOverlay{ nullptr };
+
+	/** Reference to the enemy health bar UMG asset in the editor */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
+	TSubclassOf<UUserWidget> WEnemyHealthBar;
+	
+	/** Variable to hold the enemy health bar widget after creating it */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
+	UUserWidget* EnemyHealthBar{ nullptr };
+
+	/** Check if the enemy health bar is to be displayed or not */
+	bool bEnemyHealthBarVisible{};
 
 protected:
 
 	virtual void BeginPlay() override;
+
+public:
+
+	void DisplayEnemyHealthBar();
+
+	void RemoveEnemyHealthBar();
 };
