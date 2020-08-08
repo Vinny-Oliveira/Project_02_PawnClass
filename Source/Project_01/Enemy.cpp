@@ -91,6 +91,10 @@ void AEnemy::AgroSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, 
 }
 
 void AEnemy::AgroSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
+	if (!IsAlive()) {
+		return;
+	}
+	
 	if (AMain * Main{ GetValidCharacter(OtherActor) }) {
 		SetEnemyMovementStatus(EEnemyMovementStatus::EEMS_Idle);
 		if (AIController) {
@@ -114,6 +118,10 @@ void AEnemy::CombatSphereOnOverlapBegin(UPrimitiveComponent* OverlappedComponent
 }
 
 void AEnemy::CombatSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
+	if (!IsAlive()) {
+		return;
+	}
+	
 	if (AMain* Main{ GetValidCharacter(OtherActor) }) {
 		bOverlappingCombatSphere = false;
 
@@ -252,6 +260,7 @@ float AEnemy::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEv
 }
 
 void AEnemy::Die() {
+	UE_LOG(LogTemp, Warning, TEXT("Enemy Dead"));
 	UAnimInstance* AnimInstance{ GetMesh()->GetAnimInstance() };
 	// Play death animation
 	if (AnimInstance && CombatMontage) {
@@ -261,15 +270,15 @@ void AEnemy::Die() {
 
 	SetEnemyMovementStatus(EEnemyMovementStatus::EEMS_Dead);
 
-	// Deactivate enemy collision
-	CombatCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	AgroSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	CombatSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	//// Deactivate enemy collision
+	//CombatCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	//AgroSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	//CombatSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	//GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
-void AEnemy::DeathEnd() {
-	UE_LOG(LogTemp, Warning, TEXT("Enemy Dead"));
-	//GetMesh()->bPauseAnims = true;
-	//GetMesh()->bNoSkeletonUpdate = true;
-}
+//void AEnemy::DeathEnd() {
+//	//UE_LOG(LogTemp, Warning, TEXT("Enemy Dead"));
+//	//GetMesh()->bPauseAnims = true;
+//	//GetMesh()->bNoSkeletonUpdate = true;
+//}
