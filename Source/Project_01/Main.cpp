@@ -84,7 +84,7 @@ void AMain::Tick(float DeltaTime)
 
 	InterpToEnemy(DeltaTime);
 
-	HandleEnemyHealthBar();
+	HandleCombatTargetLocation();
 }
 
 // Called to bind functionality to input
@@ -364,12 +364,10 @@ float AMain::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEve
 	return DamageAmount;
 }
 
-void AMain::HandleEnemyHealthBar() {
+void AMain::HandleCombatTargetLocation() {
 	if (MainPlayerController) {
 		if (CombatTarget) {
 			MainPlayerController->EnemyLocation = CombatTarget->GetActorLocation();
-		//} else {
-		//	MainPlayerController->HideEnemyHealthBar();
 		}
 	}
 }

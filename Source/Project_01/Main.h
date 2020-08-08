@@ -349,5 +349,5 @@ public:
 	/// <summary>
 	/// Handle how the enemy health bar is displayed
 	/// </summary>
-	void HandleEnemyHealthBar();
+	void HandleCombatTargetLocation();
 };

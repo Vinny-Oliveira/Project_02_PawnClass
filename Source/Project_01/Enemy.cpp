@@ -298,6 +298,7 @@ void AEnemy::Die(AActor* DamageCauser) {
 		if (Weapon) {
 			AMain* Main = Weapon->Wielder;
 			if (Main->CombatTarget == this) {
+				Main->CombatTarget = nullptr;
 				Main->MainPlayerController->HideEnemyHealthBar();
 			}
 		}
