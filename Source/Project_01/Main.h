@@ -253,6 +253,9 @@ public:
 	/// <param name="Amount"></param>
 	void DecrementHealth(float Amount);
 
+	/// <summary>
+	/// Take damage from enemies
+	/// </summary>
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	/// <summary>

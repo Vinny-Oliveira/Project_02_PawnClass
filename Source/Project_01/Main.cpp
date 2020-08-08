@@ -146,7 +146,12 @@ void AMain::LookUpAtRate(float Rate) {
 }
 
 void AMain::Die() {
-	UE_LOG(LogTemp, Warning, TEXT("DEAD"));
+	UAnimInstance* AnimInstance{ GetMesh()->GetAnimInstance() };
+	// Play death animation
+	if (AnimInstance && CombatMontage) {
+		AnimInstance->Montage_Play(CombatMontage, 1.f);
+		AnimInstance->Montage_JumpToSection(FName("Death"), CombatMontage);
+	}
 }
 
 void AMain::DecrementHealth(float Amount) {

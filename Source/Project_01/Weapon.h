@@ -53,6 +53,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Sound")
 	USoundCue* SwingSound{ nullptr };
 
+	/** Damage type class */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item | Combat")
+	TSubclassOf<UDamageType> DamageTypeClass{};
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item | Combat")
+	AController* WeaponInstigator{ nullptr };
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -110,4 +117,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DeactivateCollision();
 
+	/// <summary>
+	/// Setter of the Weapon Instigator
+	/// </summary>
+	/// <param name="Instigator"></param>
+	FORCEINLINE void SetInstigator(AController* Inst) { WeaponInstigator = Inst; }
 };

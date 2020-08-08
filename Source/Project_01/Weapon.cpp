@@ -54,6 +54,8 @@ void AWeapon::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 
 void AWeapon::Equip(AMain* Character) {
 	if (Character) {
+		SetInstigator(Character->GetController());
+
 		SkeletalMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore); // Camera does not zoom in if the sword is in the way
 		SkeletalMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
 		SkeletalMesh->SetSimulatePhysics(false);
@@ -81,6 +83,7 @@ void AWeapon::Equip(AMain* Character) {
 
 void AWeapon::CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
 	if (AEnemy* Enemy{ GetValidEnemy(OtherActor) }) {
+		// Particles
 		if (Enemy->HitParticles) {
 
 			// Spawn the particles at the Weapon Socket, a location by the blade
@@ -91,9 +94,16 @@ void AWeapon::CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AAc
 			}
 		}
 
+		// Hit sound
 		if (Enemy->StruckSound) {
 			UGameplayStatics::PlaySound2D(this, Enemy->StruckSound);
 		}
+
+		// Apply Damage
+		if (DamageTypeClass) {
+			UGameplayStatics::ApplyDamage(Enemy, Damage, WeaponInstigator, this, DamageTypeClass);
+		}
+
 	}
 }
 

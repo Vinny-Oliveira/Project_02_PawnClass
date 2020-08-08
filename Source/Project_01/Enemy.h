@@ -11,6 +11,7 @@ enum class EEnemyMovementStatus : uint8 {
 	EEMS_Idle			UMETA(DisplayName = "Idle"),
 	EEMS_MoveToTarget	UMETA(DisplayName = "MoveToTarget"),
 	EEMS_Attacking		UMETA(DisplayName = "Attacking"),
+	EEMS_Dead			UMETA(DisplayName = "Dead"),
 
 	EEMS_MAX			UMETA(DisplayName = "DefaultMAX")
 };
@@ -191,4 +192,26 @@ public:
 	/// </summary>
 	UFUNCTION(BlueprintCallable)
 	void AttackEnd();
+
+	/// <summary>
+	/// Take damage from the player
+	/// </summary>
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
+	/// <summary>
+	/// Play death animation and deactivate enemy collision
+	/// </summary>
+	void Die();
+
+	/// <summary>
+	/// Trigger the death events after the death animation is played
+	/// </summary>
+	UFUNCTION(BlueprintCallable)
+	void DeathEnd();
+
+	/// <summary>
+	/// Returns whether the Enemy is alive or not
+	/// </summary>
+	/// <returns></returns>
+	FORCEINLINE bool IsAlive() { return (EnemyMovementStatus != EEnemyMovementStatus::EEMS_Dead); }
 };
