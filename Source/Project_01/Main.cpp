@@ -359,3 +359,7 @@ float AMain::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEve
 
 	return DamageAmount;
 }
+
+//bool AMain::HasCombatTarget() { 
+//	return (CombatTarget != nullptr); 
+//}

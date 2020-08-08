@@ -312,4 +312,10 @@ public:
 	/// </summary>
 	/// <param name="DeltaTime"></param>
 	void InterpToEnemy(float DeltaTime);
+
+	/// <summary>
+	/// Check if the character has a combat target
+	/// </summary>
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE bool HasCombatTarget() { return (CombatTarget != nullptr); }
 };
