@@ -84,6 +84,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
 	bool bAttacking{};
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	TSubclassOf<UDamageType> DamageTypeClass{};
+
+#pragma region ATTACK_DELAY
 	/**
 	/* Handlers of the enemy's attack delay
 	*/
@@ -95,6 +99,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	float MaxAttackTime{};
+
+#pragma endregion
+
 
 protected:
 	// Called when the game starts or when spawned

@@ -20,7 +20,7 @@ AEnemy::AEnemy()
 	Damage{ 10.f },
 	bAttacking{ false },
 	MinAttackTime{ 0.5f },
-	MaxAttackTime{ 3.5f } {
+	MaxAttackTime{ 1.2f } {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -113,7 +113,11 @@ void AEnemy::CombatSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, 
 		if (EnemyMovementStatus != EEnemyMovementStatus::EEMS_Attacking) {
 			MoveToTarget(Main);
 			CombatTarget = nullptr;
-			Main->SetCombatTarget(nullptr);
+			
+			// Null out the Main's CombatTarget if its currrent one is this Enemy
+			if (Main->CombatTarget == this) {
+				Main->SetCombatTarget(nullptr);
+			}
 		}
 	}
 }
@@ -156,6 +160,7 @@ AMain* AEnemy::GetValidCharacter(AActor* OtherActor) {
 
 void AEnemy::CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
 	if (AMain* Main{ GetValidCharacter(OtherActor) }) {
+		// Particles
 		if (Main->HitParticles) {
 
 			// Spawn the particles at the Weapon Socket, a location by the blade
@@ -166,8 +171,14 @@ void AEnemy::CombatOnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AAct
 			}
 		}
 
+		// Hit sound
 		if (Main->StruckSound) {
 			UGameplayStatics::PlaySound2D(this, Main->StruckSound);
+		}
+
+		// Apply Damage
+		if (DamageTypeClass) {
+			UGameplayStatics::ApplyDamage(Main, Damage, AIController, this, DamageTypeClass);
 		}
 	}
 }

@@ -348,3 +348,9 @@ void AMain::InterpToEnemy(float DeltaTime) {
 		SetActorRotation(InterpRotation);
 	}
 }
+
+float AMain::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) {
+	DecrementHealth(DamageAmount);
+
+	return DamageAmount;
+}

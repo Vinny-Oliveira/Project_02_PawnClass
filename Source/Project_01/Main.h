@@ -253,6 +253,8 @@ public:
 	/// <param name="Amount"></param>
 	void DecrementHealth(float Amount);
 
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
 	/// <summary>
 	/// Increase the coins by an Amount
 	/// </summary>
