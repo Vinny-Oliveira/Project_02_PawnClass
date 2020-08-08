@@ -276,11 +276,11 @@ void AEnemy::Die() {
 
 	SetEnemyMovementStatus(EEnemyMovementStatus::EEMS_Dead);
 
-	//// Deactivate enemy collision
-	//CombatCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	//AgroSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	//CombatSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	//GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	// Deactivate enemy collision
+	CombatCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	AgroSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	CombatSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void AEnemy::DeathEnd() {
