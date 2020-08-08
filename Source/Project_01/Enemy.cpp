@@ -98,6 +98,13 @@ void AEnemy::AgroSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AA
 	}
 	
 	if (AMain * Main{ GetValidCharacter(OtherActor) }) {
+		// Hide health bar
+		// Display Enemy health bar
+		if (Main->MainPlayerController) {
+			Main->MainPlayerController->HideEnemyHealthBar();
+		}
+
+		// Stop movement
 		SetEnemyMovementStatus(EEnemyMovementStatus::EEMS_Idle);
 		if (AIController) {
 			AIController->StopMovement();

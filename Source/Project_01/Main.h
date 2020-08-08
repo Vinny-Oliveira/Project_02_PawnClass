@@ -33,6 +33,7 @@ public:
 	// Sets default values for this character's properties
 	AMain();
 
+#pragma region CAMERA
 	/** Camera boom positioning the camera behind the player */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom{ nullptr };
@@ -49,6 +50,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	float BaseLookUpRate{};
 
+#pragma endregion
+
+
+#pragma region MOVEMENT
 	/** Enum for the movement state of the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enums")
 	EMovementStatus MovementStatus { EMovementStatus::EMS_Normal };
@@ -73,22 +78,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float MinSprintStamina{};
 
-	/** Boolean to check if the Shift key is being pressed or not */
-	bool bShiftKeyDown{};
+#pragma endregion
 
-	/** TArray that stores the locations of the items picked up */
-	TArray<FVector> PickupLocations{};
 
-	/** Weapon equiped to the character */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Items)
-	class AWeapon* EquippedWeapon{ nullptr };
-
-	/** Item the character is overlapping with */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Items)
-	class AItem* ActiveOverlappingItem{ nullptr };
-
-	/** Boolean to check if the left mouse button is being pressed */
-	bool bLeftMouseBtnDown{};
+#pragma region COMBAT
 
 	/** Boolean to check if the character is attacking */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Anims")
@@ -116,10 +109,43 @@ public:
 	/** Check if the character is interpolationg towards the enemy */
 	bool bInterpingToEnemy{};
 
-	/**
-	/* Player Stats
-	*/
+	/** Player controller to see enemy health during combat */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Controller")
+	class AMainPlayerController* MainPlayerController{ nullptr };
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Combat")
+	FVector CombatTargetLocation{};
+
+#pragma endregion
+
+
+#pragma region CONTROLLER_EVENTS
+	/** Boolean to check if the Shift key is being pressed or not */
+	bool bShiftKeyDown{};
+
+	/** Boolean to check if the left mouse button is being pressed */
+	bool bLeftMouseBtnDown{};
+
+#pragma endregion
+
+
+#pragma region ITEM_INTERACTION
+	/** TArray that stores the locations of the items picked up */
+	TArray<FVector> PickupLocations{};
+
+	/** Weapon equiped to the character */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Items)
+	class AWeapon* EquippedWeapon{ nullptr };
+
+	/** Item the character is overlapping with */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Items)
+	class AItem* ActiveOverlappingItem{ nullptr };
+
+#pragma endregion
+
+
+#pragma region PLAYER_STATS
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Stats")
 	float Health{};
 	
@@ -134,6 +160,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Stats")
 	int32 Coins{};
+
+#pragma endregion
+
+
 
 protected:
 	// Called when the game starts or when spawned

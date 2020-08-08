@@ -35,13 +35,17 @@ public:
 	/** Check if the enemy health bar is to be displayed or not */
 	bool bEnemyHealthBarVisible{};
 
+	FVector EnemyLocation{};
+
 protected:
 
 	virtual void BeginPlay() override;
+	
+	virtual void Tick(float DeltaTime) override;
 
 public:
 
 	void DisplayEnemyHealthBar();
 
-	void RemoveEnemyHealthBar();
+	void HideEnemyHealthBar();
 };

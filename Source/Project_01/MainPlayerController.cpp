@@ -22,6 +22,25 @@ void AMainPlayerController::BeginPlay() {
 			EnemyHealthBar->AddToViewport();
 			EnemyHealthBar->SetVisibility(ESlateVisibility::Hidden);
 		}
+
+		// Make the health bar flat on the screen
+		FVector2D Allignment(0.f, 0.f);
+		EnemyHealthBar->SetAlignmentInViewport(Allignment);
+	}
+}
+
+void AMainPlayerController::Tick(float DeltaTime) {
+	Super::Tick(DeltaTime);
+
+	// Place the enemy health bar on the proper place
+	if (EnemyHealthBar) {
+		FVector2D PositionInViewport{};
+		ProjectWorldLocationToScreen(EnemyLocation, PositionInViewport);
+
+		FVector2D SizeInViewport(200.f, 25.f);
+
+		EnemyHealthBar->SetPositionInViewport(PositionInViewport);
+		EnemyHealthBar->SetDesiredSizeInViewport(SizeInViewport);
 	}
 }
 
@@ -32,7 +51,7 @@ void AMainPlayerController::DisplayEnemyHealthBar() {
 	}
 }
 
-void AMainPlayerController::RemoveEnemyHealthBar() {
+void AMainPlayerController::HideEnemyHealthBar() {
 	if (EnemyHealthBar) {
 		bEnemyHealthBarVisible = false;
 		EnemyHealthBar->SetVisibility(ESlateVisibility::Hidden);

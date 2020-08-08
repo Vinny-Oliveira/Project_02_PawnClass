@@ -83,6 +83,13 @@ void AMain::Tick(float DeltaTime)
 	HandleStaminaStatus(DeltaTime);
 
 	InterpToEnemy(DeltaTime);
+
+	if (CombatTarget) {
+		CombatTargetLocation = CombatTarget->GetActorLocation();
+		if (MainPlayerController) {
+			MainPlayerController->EnemyLocation = CombatTargetLocation;
+		}
+	}
 }
 
 // Called to bind functionality to input
