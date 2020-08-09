@@ -107,7 +107,7 @@ void AMain::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AMain::LookUpAtRate);
 
 	// Bind jump
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AMain::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	
 	// Bind sprint
@@ -122,7 +122,7 @@ void AMain::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 }
 
 void AMain::MoveInDirection(float Value, EAxis::Type Axis) {
-	if ((Controller != nullptr) && (Value != 0.f) && (!bIsAttacking)) {
+	if ((Controller != nullptr) && (Value != 0.f) && (!bIsAttacking) && (IsAlive())) {
 		// Find out which way is forward (where the camera is pointing to)
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
@@ -156,6 +156,19 @@ void AMain::Die() {
 		AnimInstance->Montage_Play(CombatMontage, 1.f);
 		AnimInstance->Montage_JumpToSection(FName("Death"), CombatMontage);
 	}
+
+	SetMovementStatus(EMovementStatus::EMS_Dead);
+}
+
+void AMain::DeathEnd() {
+	//UE_LOG(LogTemp, Warning, TEXT("Enemy Dead"));
+
+	// Freeze position and animation
+	GetMesh()->bPauseAnims = true;
+	GetMesh()->bNoSkeletonUpdate = true;
+
+	// Destroy the enemy in the world
+	//GetWorldTimerManager().SetTimer(DestroyTimer, this, &AEnemy::Disappear, DestroyDelay);
 }
 
 void AMain::DecrementHealth(float Amount) {
@@ -177,6 +190,8 @@ void AMain::SetMovementStatus(EMovementStatus Status) {
 
 	if (MovementStatus == EMovementStatus::EMS_Sprinting) {
 		GetCharacterMovement()->MaxWalkSpeed = SprintingSpeed;
+	} else if (MovementStatus == EMovementStatus::EMS_Dead) {
+		GetCharacterMovement()->MaxWalkSpeed = 0;
 	} else {
 		GetCharacterMovement()->MaxWalkSpeed = RunningSpeed;
 	}
@@ -191,6 +206,10 @@ void AMain::ShiftKeyUp() {
 }
 
 void AMain::HandleStaminaStatus(float DeltaTime) {
+	if (!IsAlive()) {
+		return;
+	}
+
 	float DeltaStamina{ StaminaDrainRate * DeltaTime };
 	float CurrentSpeed{ GetVelocity().Size() };
 	bool bIsInAir{ GetMovementComponent()->IsFalling() };
@@ -270,6 +289,11 @@ void AMain::ShowPickupLocations() {
 
 void AMain::LeftMouseBtnDown() {
 	bLeftMouseBtnDown = true;
+
+	if (!IsAlive()) {
+		return;
+	}
+
 	if (ActiveOverlappingItem) {
 		AWeapon* Weapon = Cast<AWeapon>(ActiveOverlappingItem);
 		if (Weapon) {
@@ -294,6 +318,10 @@ void AMain::SetEquippedWeapon(AWeapon* WeaponToSet) {
 }
 
 void AMain::Attack() {
+	if (!IsAlive()) {
+		return;
+	}
+
 	if (!bIsAttacking) { // Do not attack if an attack animation is playing
 		bIsAttacking = true;
 		SetInterpingToEnemy(true);
@@ -369,5 +397,11 @@ void AMain::HandleCombatTargetLocation() {
 		if (CombatTarget) {
 			MainPlayerController->EnemyLocation = CombatTarget->GetActorLocation();
 		}
+	}
+}
+
+void AMain::Jump() {
+	if (IsAlive()) {
+		Super::Jump();
 	}
 }

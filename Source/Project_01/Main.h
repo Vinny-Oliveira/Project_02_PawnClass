@@ -10,6 +10,7 @@ UENUM(BlueprintType)
 enum class EMovementStatus : uint8 {
 	EMS_Normal		UMETA(DisplayName = "Normal"),
 	EMS_Sprinting	UMETA(DisplayName = "Sprinting"),
+	EMS_Dead		UMETA(DisplayName = "Dead"),
 	
 	EMS_MAX			UMETA(DisplayName = "DefaultMAX")
 };
@@ -272,7 +273,16 @@ public:
 	/// </summary>
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+	/// <summary>
+	/// Trigger the death events of the mais character
+	/// </summary>
 	void Die();
+
+	/// <summary>
+	/// Trigger the death events after the death animation is played
+	/// </summary>
+	UFUNCTION(BlueprintCallable)
+	void DeathEnd();
 
 	/// <summary>
 	/// Decrease the health by an Amount
@@ -350,4 +360,15 @@ public:
 	/// Handle how the enemy health bar is displayed
 	/// </summary>
 	void HandleCombatTargetLocation();
+
+	/// <summary>
+	/// Returns whether the Enemy is alive or not
+	/// </summary>
+	/// <returns></returns>
+	FORCEINLINE bool IsAlive() { return (MovementStatus != EMovementStatus::EMS_Dead); }
+
+	/// <summary>
+	/// Add to the original jump functionality
+	/// </summary>
+	virtual void Jump() override;
 };
