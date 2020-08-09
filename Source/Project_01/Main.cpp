@@ -161,14 +161,10 @@ void AMain::Die() {
 }
 
 void AMain::DeathEnd() {
-	//UE_LOG(LogTemp, Warning, TEXT("Enemy Dead"));
 
 	// Freeze position and animation
 	GetMesh()->bPauseAnims = true;
 	GetMesh()->bNoSkeletonUpdate = true;
-
-	// Destroy the enemy in the world
-	//GetWorldTimerManager().SetTimer(DestroyTimer, this, &AEnemy::Disappear, DestroyDelay);
 }
 
 void AMain::DecrementHealth(float Amount) {

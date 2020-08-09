@@ -25,10 +25,7 @@ public:
 	// Sets default values for this character's properties
 	AEnemy();
 
-	/** Enum of the movement status */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
-	EEnemyMovementStatus EnemyMovementStatus{ EEnemyMovementStatus::EEMS_Idle };
-
+#pragma region PHYSICS_COMPONENTS
 	/** For when the enemy sees and chases the player */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
 	class USphereComponent* AgroSphere{ nullptr };
@@ -37,14 +34,30 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
 	USphereComponent* CombatSphere{ nullptr };
 
-	/** Enemy's AI Controller */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
-	class AAIController* AIController{ nullptr };
-
 	/** Checks if the Combat Sphere is being overlapped with */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI")
 	bool bOverlappingCombatSphere{};
 
+	/** Box collider used for combat */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Combat")
+	class UBoxComponent* CombatCollision{ nullptr };
+
+#pragma endregion
+
+
+#pragma region MOVEMENT
+	/** Enum of the movement status */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
+	EEnemyMovementStatus EnemyMovementStatus{ EEnemyMovementStatus::EEMS_Idle };
+
+	/** Enemy's AI Controller */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
+	class AAIController* AIController{ nullptr };
+
+#pragma endregion
+
+
+#pragma region COMBAT
 	/** Target for the attack animation */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI")
 	AMain* CombatTarget{ nullptr };
@@ -73,10 +86,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
 	USoundCue* SwingSound{ nullptr };
 
-	/** Box collider used for combat */
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Combat")
-	class UBoxComponent* CombatCollision{ nullptr };
-
 	/** Enemy's combat montage */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	class UAnimMontage* CombatMontage{ nullptr };
@@ -88,10 +97,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	TSubclassOf<UDamageType> DamageTypeClass{};
 
+#pragma endregion
+
+
 #pragma region ATTACK_DELAY
-	/**
-	/* Handlers of the enemy's attack delay
-	*/
 
 	FTimerHandle AttackTimer{};
 
@@ -126,12 +135,17 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+#pragma region GETTERS_AND_SETTERS
 	/// <summary>
 	/// Set the movement status
 	/// </summary>
 	/// <param name="Status"></param>
 	FORCEINLINE void SetEnemyMovementStatus(EEnemyMovementStatus Status) { EnemyMovementStatus = Status; }
 
+#pragma endregion
+
+
+#pragma region PHYSICS_OVERLAP
 	/// <summary>
 	/// Event to detect when the Agro Sphere is overlapped */
 	/// </summary>
@@ -157,19 +171,6 @@ public:
 	virtual void CombatSphereOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	/// <summary>
-	/// Make the enemy move to the targetted character
-	/// </summary>
-	/// <param name="Target"></param>
-	UFUNCTION(BlueprintCallable)
-	void MoveToTarget(class AMain* Target);
-
-	/// <summary>
-	/// Gets the Character that is overlapping with the enemy
-	/// </summary>
-	UFUNCTION()
-	AMain* GetValidCharacter(AActor* OtherActor);
-
-	/// <summary>
 	/// Detect when the combat box is overlapped
 	/// </summary>
 	UFUNCTION()
@@ -181,6 +182,11 @@ public:
 	UFUNCTION()
 	void CombatOnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+
+#pragma endregion
+
+
+#pragma region COMBAT
 	/// <summary>
 	/// Allow the enemy to deal damage
 	/// </summary>
@@ -209,6 +215,21 @@ public:
 	/// </summary>
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
+#pragma endregion
+
+
+#pragma region MOVEMENT
+	/// <summary>
+	/// Make the enemy move to the targetted character
+	/// </summary>
+	/// <param name="Target"></param>
+	UFUNCTION(BlueprintCallable)
+	void MoveToTarget(class AMain* Target);
+
+#pragma endregion
+
+
+#pragma region DEATH
 	/// <summary>
 	/// Play death animation and deactivate enemy collision
 	/// </summary>
@@ -230,4 +251,17 @@ public:
 	/// Destroy the enemy after death
 	/// </summary>
 	void Disappear();
+
+#pragma endregion
+
+
+#pragma region UTILITIES
+	/// <summary>
+	/// Gets the Character that is overlapping with the enemy
+	/// </summary>
+	UFUNCTION()
+	AMain* GetValidCharacter(AActor* OtherActor);
+
+#pragma endregion
+
 };

@@ -183,6 +183,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+#pragma region GETTERS_AND_SETTERS
 	/// <summary>
 	/// Set movement status and running speed
 	/// </summary>
@@ -214,6 +215,32 @@ public:
 	FORCEINLINE void SetActiveOverlappingItem(AItem* Item) { ActiveOverlappingItem = Item; }
 
 	/// <summary>
+	/// Getter for CameraBoom
+	/// </summary>
+	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+
+	/// <summary>
+	/// Getters for FollowCamera
+	/// </summary>
+	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	/// <summary>
+	/// Set whether or not the Character is interping to the enemy
+	/// </summary>
+	/// <param name="IsInterping"></param>
+	FORCEINLINE void SetInterpingToEnemy(bool IsInterping) { bInterpingToEnemy = IsInterping; }
+
+	/// <summary>
+	/// Set the CombatTarget
+	/// </summary>
+	/// <param name="Target"></param>
+	FORCEINLINE void SetCombatTarget(AEnemy* Target) { CombatTarget = Target; }
+
+#pragma endregion
+
+
+#pragma region MOVEMENT
+	/// <summary>
 	/// Called for forward and backwards input
 	/// </summary>
 	/// <param name="value"></param>
@@ -238,6 +265,29 @@ public:
 	void LookUpAtRate(float Rate);
 
 	/// <summary>
+	/// Return the yaw rotation needed for the character to face the target
+	/// </summary>
+	/// <param name="Target"></param>
+	/// <returns></returns>
+	FRotator GetLookAtRotationYaw(FVector Target);
+	FRotator GetLookAtRotationYaw(AActor* Target);
+
+	/// <summary>
+	/// Rotate the enemy towards the target using interpolation
+	/// </summary>
+	/// <param name="DeltaTime"></param>
+	void InterpToEnemy(float DeltaTime);
+
+	/// <summary>
+	/// Add to the original jump functionality
+	/// </summary>
+	virtual void Jump() override;
+
+#pragma endregion
+
+
+#pragma region PLAYER_INPUT
+	/// <summary>
 	/// Press shift down to enable sprint
 	/// </summary>
 	void ShiftKeyDown();
@@ -257,33 +307,10 @@ public:
 	/// </summary>
 	void LeftMouseBtnUp();
 
-	/// <summary>
-	/// Handle how the status of the stamina bar
-	/// </summary>
-	/// <param name="DeltaTime"></param>
-	void HandleStaminaStatus(float DeltaTime);
+#pragma endregion
 
-	/// <summary>
-	/// Getter for CameraBoom
-	/// </summary>
-	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 
-	/// <summary>
-	/// Getters for FollowCamera
-	/// </summary>
-	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
-
-	/// <summary>
-	/// Trigger the death events of the mais character
-	/// </summary>
-	void Die();
-
-	/// <summary>
-	/// Trigger the death events after the death animation is played
-	/// </summary>
-	UFUNCTION(BlueprintCallable)
-	void DeathEnd();
-
+#pragma region COMBAT
 	/// <summary>
 	/// Decrease the health by an Amount
 	/// </summary>
@@ -294,18 +321,6 @@ public:
 	/// Take damage from enemies
 	/// </summary>
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
-
-	/// <summary>
-	/// Increase the coins by an Amount
-	/// </summary>
-	/// <param name="Amount"></param>
-	void IncrementCoins(int32 Amount);
-
-	/// <summary>
-	/// Display a debug sphere on the location of an item that has been picked up
-	/// </summary>
-	UFUNCTION(BlueprintCallable)
-	void ShowPickupLocations();
 
 	/// <summary>
 	/// Play attack animations and deal damage
@@ -325,41 +340,25 @@ public:
 	void PlaySwingSound();
 
 	/// <summary>
-	/// Set whether or not the Character is interping to the enemy
-	/// </summary>
-	/// <param name="IsInterping"></param>
-	FORCEINLINE void SetInterpingToEnemy(bool IsInterping) { bInterpingToEnemy = IsInterping; }
-
-	/// <summary>
-	/// Set the CombatTarget
-	/// </summary>
-	/// <param name="Target"></param>
-	FORCEINLINE void SetCombatTarget(AEnemy* Target) { CombatTarget = Target; }
-
-	/// <summary>
-	/// Return the yaw rotation needed for the character to face the target
-	/// </summary>
-	/// <param name="Target"></param>
-	/// <returns></returns>
-	FRotator GetLookAtRotationYaw(FVector Target);
-	FRotator GetLookAtRotationYaw(AActor* Target);
-
-	/// <summary>
-	/// Rotate the enemy towards the target using interpolation
-	/// </summary>
-	/// <param name="DeltaTime"></param>
-	void InterpToEnemy(float DeltaTime);
-
-	/// <summary>
 	/// Check if the character has a combat target
 	/// </summary>
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE bool HasCombatTarget() { return (CombatTarget != nullptr); }
 
+#pragma endregion
+
+
+#pragma region DEATH
 	/// <summary>
-	/// Handle how the enemy health bar is displayed
+	/// Trigger the death events of the mais character
 	/// </summary>
-	void HandleCombatTargetLocation();
+	void Die();
+
+	/// <summary>
+	/// Trigger the death events after the death animation is played
+	/// </summary>
+	UFUNCTION(BlueprintCallable)
+	void DeathEnd();
 
 	/// <summary>
 	/// Returns whether the Enemy is alive or not
@@ -367,8 +366,37 @@ public:
 	/// <returns></returns>
 	FORCEINLINE bool IsAlive() { return (MovementStatus != EMovementStatus::EMS_Dead); }
 
+#pragma endregion
+
+
+#pragma region BEHAVIOR_HANDLERS
 	/// <summary>
-	/// Add to the original jump functionality
+	/// Handle how the status of the stamina bar
 	/// </summary>
-	virtual void Jump() override;
+	/// <param name="DeltaTime"></param>
+	void HandleStaminaStatus(float DeltaTime);
+
+	/// <summary>
+	/// Handle how the enemy health bar is displayed
+	/// </summary>
+	void HandleCombatTargetLocation();
+
+#pragma endregion
+
+
+#pragma region PICKUP_ITEMS
+	/// <summary>
+	/// Increase the coins by an Amount
+	/// </summary>
+	/// <param name="Amount"></param>
+	void IncrementCoins(int32 Amount);
+
+	/// <summary>
+	/// Display a debug sphere on the location of an item that has been picked up
+	/// </summary>
+	UFUNCTION(BlueprintCallable)
+	void ShowPickupLocations();
+
+#pragma endregion
+
 };
