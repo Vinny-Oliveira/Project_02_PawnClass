@@ -74,4 +74,14 @@ public:
 	/// </summary>
 	class AEnemy* GetValidEnemy(AActor* OtherActor);
 
+	/// <summary>
+	/// Emit item's paticles
+	/// </summary>
+	void EmitParticles();
+
+	/// <summary>
+	/// Play item's sound
+	/// </summary>
+	void PlaySound();
+
 };

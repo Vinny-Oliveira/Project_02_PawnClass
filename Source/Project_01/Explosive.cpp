@@ -13,6 +13,8 @@ void AExplosive::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor
 	Super::OnOverlapBegin(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 
 	if (AMain* Main{ GetValidCharacter(OtherActor) }) {
+		EmitParticles();
+		PlaySound();
 		Main->DecrementHealth(Damage);
 		Destroy();
 	}

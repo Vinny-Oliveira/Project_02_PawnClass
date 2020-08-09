@@ -48,17 +48,6 @@ void AItem::Tick(float DeltaTime)
 }
 
 void AItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
-	//UE_LOG(LogTemp, Warning, TEXT("OnOverlapBegin Called"));
-
-	// Emit particles
-	if (OverlapParticles) {
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), OverlapParticles, GetActorLocation(), FRotator(0.f), true);
-	}
-
-	// Play sound
-	if (OverlapSound) {
-		UGameplayStatics::PlaySound2D(this, OverlapSound);
-	}
 
 }
 
@@ -86,4 +75,18 @@ AEnemy* AItem::GetValidEnemy(AActor* OtherActor) {
 	}
 
 	return nullptr;
+}
+
+void AItem::EmitParticles() {
+	// Emit particles
+	if (OverlapParticles) {
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), OverlapParticles, GetActorLocation(), FRotator(0.f), true);
+	}
+}
+
+void AItem::PlaySound() {
+	// Play sound
+	if (OverlapSound) {
+		UGameplayStatics::PlaySound2D(this, OverlapSound);
+	}
 }
