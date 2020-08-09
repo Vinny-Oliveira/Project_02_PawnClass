@@ -172,6 +172,10 @@ void AMain::DeathEnd() {
 }
 
 void AMain::DecrementHealth(float Amount) {
+	if (!IsAlive()) {
+		return;
+	}
+	
 	Health -= Amount;
 
 	// Check if the character dies

@@ -241,7 +241,7 @@ void AEnemy::DeactivateCollision() {
 }
 
 void AEnemy::Attack() {
-	if (!IsAlive()) {
+	if (!IsAlive() || (CombatTarget && !(CombatTarget->IsAlive()))) {
 		return;
 	}
 
